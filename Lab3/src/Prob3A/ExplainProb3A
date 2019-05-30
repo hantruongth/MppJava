@@ -1,3 +1,0 @@
- It dosen't make sense to use inheritance here
- Because Circle IS-A Cylinder, but LSP is violated.
-
