@@ -1,4 +1,36 @@
-The result is false because on equal's PersonWithJob function 
-take into account the attribute salary and this parameter on class Person does not exist,
-so when the equal function from PersonWithJob makes the cast, that property is set with null
-and null is different to current value for object p1
+
+// in PersonWithJob
+
+@Override
+public boolean equals(Object aPerson) {
+	if(aPerson == null) return false; 
+	if(!(aPerson instanceof PersonWithJob)) return false;
+	PersonWithJob p = (PersonWithJob)aPerson;
+	boolean isEqual = this.getName().equals(p.getName()) &&
+			this.getSalary()==p.getSalary();
+	return isEqual;
+}
+
+System.out.println("p1.equals(p2)? " + p1.equals(p2)) --> False
+Because in class PersionWithJob, the method equal above mentioned that
+if(!(aPerson instanceof PersonWithJob)) 
+	return false
+p2: is the instance of Person, not instance of PersonWithJob.
+==> False
+---------------------------------------------------------------------------
+// in Person class
+
+@Override
+public boolean equals(Object aPerson) {
+	if(aPerson == null) return false; 
+	if(!(aPerson instanceof Person)) return false;
+	Person p = (Person)aPerson;
+	boolean isEqual = this.name.equals(p.name);
+	return isEqual;
+}
+
+ System.out.println("p2.equals(p1)? " + p2.equals(p1.person))---> True
+ Because in class Person, the method equal above has casted object PersonWithJob to Person, it's fine to cast because PersonWithJob was extented from Person.
+ Then, it compares the name of 2 persons which is the same name (boolean isEqual = this.name.equals(p.name);)
+ ==> True
+ 
