@@ -1,0 +1,4 @@
+The result is false because on equal's PersonWithJob function 
+take into account the attribute salary and this parameter on class Person does not exist,
+so when the equal function from PersonWithJob makes the cast, that property is set with null
+and null is different to current value for object p1
