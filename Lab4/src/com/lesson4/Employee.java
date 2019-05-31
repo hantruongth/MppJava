@@ -7,7 +7,6 @@ public abstract class Employee {
 		
 		this.emppId = id;
 	}
-
 	public void print(int month, int year) {
 		System.out.println("Employee ID: "+ this.emppId);
 		System.out.println("Paystub:");

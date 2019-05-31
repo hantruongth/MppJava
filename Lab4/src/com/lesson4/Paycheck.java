@@ -3,18 +3,14 @@ package com.lesson4;
 public final class Paycheck {
 
 	private double grossPay;
-	public static final double FICA_TAX_RATE = 23.0 / 100;
-	public static final double STATE_TAX_RATE = 5.0 / 100;
-	public static final double LOCAL_TAX_RATE = 1.0 / 100;
-	public static final double MEDICARE_TAXT_RATE = 3.0 / 100;
-	public static final double SOCIAL_SECURITY_TAX_RATE = 7.5 / 100;
+	public final double FICA_TAX_RATE = 23.0 / 100;
+	public final double STATE_TAX_RATE = 5.0 / 100;
+	public final double LOCAL_TAX_RATE = 1.0 / 100;
+	public final double MEDICARE_TAXT_RATE = 3.0 / 100;
+	public final double SOCIAL_SECURITY_TAX_RATE = 7.5 / 100;
 
 	public Paycheck(double grossPay) {
 		this.grossPay = grossPay;
-	}
-
-	public void print() {
-
 	}
 
 	public double getNetPay() {
