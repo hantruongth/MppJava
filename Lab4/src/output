@@ -1,0 +1,29 @@
+Employee ID: 122
+Paystub:
+ Gross Pay: 310.0
+Fice: 0.23
+State: 0.05
+Local: 0.01
+Medicare: 0.03
+Social Security: 0.075
+NET PAY: 188.0
+
+Employee ID: 124
+Paystub:
+ Gross Pay: 300000.0
+Fice: 0.23
+State: 0.05
+Local: 0.01
+Medicare: 0.03
+Social Security: 0.075
+NET PAY: 181500.0
+
+Employee ID: 123
+Paystub:
+ Gross Pay: 225780.0
+Fice: 0.23
+State: 0.05
+Local: 0.01
+Medicare: 0.03
+Social Security: 0.075
+NET PAY: 136597.0
