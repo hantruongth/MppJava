@@ -1,0 +1,20 @@
+MallardDuck:
+	display
+	fly with wings
+	quacking
+	swimming
+DecoyDuck:
+	displaying
+	cannot fly
+	cannot quack
+	swimming
+RedheadDuck:
+	displaying
+	fly with wings
+	quacking
+	swimming
+RubberDuck:
+	displaying
+	cannot fly
+	squeaking
+	swimming
