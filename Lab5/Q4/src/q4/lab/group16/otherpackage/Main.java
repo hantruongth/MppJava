@@ -21,8 +21,8 @@ public class Main {
 		
 		
 		CustOrderFactory.createOrder(custorder, LocalDate.now());
-		CustOrderFactory.addItem(custorder, "Pants");
 		CustOrderFactory.addItem(custorder, "Knife set");
+		CustOrderFactory.addItem(custorder, "Laptop");
 		
 		
 		System.out.println(custorder.getCustomer().getOrders());
