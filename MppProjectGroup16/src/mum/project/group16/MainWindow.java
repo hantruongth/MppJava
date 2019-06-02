@@ -24,9 +24,10 @@ public class MainWindow extends Stage {
 	}
 
 	public void setStage(Stage primaryStage) {
-		primaryStage.setTitle("Welcome Page");
+		primaryStage.setTitle("Library System Home");
 		
 		VBox topContainer = new VBox();
+		
 		MenuBar mainMenu = new MenuBar();
 		Text label = new Text("Welcome to Library System");
 		label.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 30));
@@ -38,15 +39,27 @@ public class MainWindow extends Stage {
 		topContainer.getChildren().add(mainMenu);
 		topContainer.getChildren().add(labelBox);
 
-		Menu memberMenu = new Menu("Member");
-		MenuItem addMemberMenu = new MenuItem("Add a new member");
-		addMemberMenu.setOnAction(evt -> {showMemberAddWindow(primaryStage);});
+		Menu bookMenu = new Menu("Book management");
+		
+		
+		MenuItem addBookMenu = new MenuItem("Add book");
+		addBookMenu.setOnAction(e->showAddBookWindow(primaryStage));
+		
+		//addBookMenu.setOnAction(e->showAddMemberWindow(primaryStage));
+		
+		
+		MenuItem printCheckoutRecordMenu = new MenuItem("Print checkout record");
+		printCheckoutRecordMenu.setOnAction(e->showPrintCheckoutRecord(primaryStage));
+		
+		MenuItem overdueMenu = new MenuItem("Show overdue copy");
+		overdueMenu.setOnAction(e->showShowOverdue(primaryStage));
 		
 		MenuItem checkoutBook = new MenuItem("Checkout a book");
 		checkoutBook.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
+				
 				// TODO Auto-generated method stub
 				
 			}
@@ -54,8 +67,12 @@ public class MainWindow extends Stage {
 		MenuItem exitApp = new MenuItem("Exit");
 		exitApp.setOnAction(evt -> Platform.exit());
 			
-		memberMenu.getItems().addAll(addMemberMenu, checkoutBook, exitApp);
+		bookMenu.getItems().addAll(addBookMenu, printCheckoutRecordMenu, overdueMenu, checkoutBook, exitApp);
 
+		Menu memberMenu = new Menu("Member");
+		MenuItem addMemberMenu = new MenuItem("Add a new member");
+		addMemberMenu.setOnAction(evt -> {showAddMemberWindow(primaryStage);});
+		memberMenu.getItems().add(addMemberMenu);
 		
 		Menu adminMenu = new Menu("Administrator");
 		MenuItem addCopyOfBook = new MenuItem("Add a copy of book");
@@ -69,14 +86,26 @@ public class MainWindow extends Stage {
 		});
 		adminMenu.getItems().addAll(addCopyOfBook);
 		
-		mainMenu.getMenus().addAll(memberMenu, adminMenu);
+		mainMenu.getMenus().addAll(bookMenu, memberMenu, adminMenu);
 
 		setScene(new Scene(topContainer, 500, 200));
 		primaryStage.show();
 
 	}
 
-	private void showMemberAddWindow(Stage stage) {
+	private void showShowOverdue(Stage primaryStage) {
+		
+	}
+
+	private void showPrintCheckoutRecord(Stage primaryStage) {
+	}
+
+	private void showAddBookWindow(Stage primaryStage) {
+		
+		
+	}
+
+	private void showAddMemberWindow(Stage stage) {
 		MemberAddWindow memberAddWindow = MemberAddWindow.INSTANCE;
 		memberAddWindow.setStage(stage);
 		// memberAddWindow.setData(DefaultData.CATALOG_LIST_DATA);
