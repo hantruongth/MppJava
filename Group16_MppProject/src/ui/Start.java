@@ -98,8 +98,8 @@ public class Start extends Application {
             @Override
             public void handle(ActionEvent e) {
 				hideAllWindows();
-				if(!AllBooksWindow.INSTANCE.isInitialized()) {
-					AllBooksWindow.INSTANCE.init();
+				if(!BooksWindow.INSTANCE.isInitialized()) {
+					BooksWindow.INSTANCE.init();
 				}
 				ControllerInterface ci = new SystemController();
 				List<String> ids = ci.allBookIds();
@@ -108,8 +108,8 @@ public class Start extends Application {
 				for(String s: ids) {
 					sb.append(s + "\n");
 				}
-				AllBooksWindow.INSTANCE.setData(sb.toString());
-				AllBooksWindow.INSTANCE.show();
+				//AllBooksWindow.INSTANCE.setData(sb.toString());
+				BooksWindow.INSTANCE.show();
             }
 		});
 		
