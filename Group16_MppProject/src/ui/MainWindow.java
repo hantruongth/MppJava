@@ -1,8 +1,19 @@
 package ui;
 
+import java.util.Collections;
+import java.util.List;
+
+import business.ControllerInterface;
+import business.SystemController;
+import dataaccess.Auth;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -51,78 +62,105 @@ public static final MainWindow INSTANCE = new MainWindow();
 		topContainer.getChildren().add(splashBox);
 		topContainer.getChildren().add(imageHolder);
 		
-//		Menu optionsMenu = new Menu("Options");
-//		MenuItem login = new MenuItem("Login");
-//		
-//		login.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent e) {
-//            	hideAllWindows();
-//    			if(!LoginWindow.INSTANCE.isInitialized()) {
-//    				LoginWindow.INSTANCE.init();
-//    			}
-//    			LoginWindow.INSTANCE.clear();
-//    			LoginWindow.INSTANCE.show();
-//            }
-//        });			
-							
-//		MenuItem bookIds = new MenuItem("All Book Ids");
-//		bookIds.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent e) {
-//				hideAllWindows();
-//				if(!AllBooksWindow.INSTANCE.isInitialized()) {
-//					AllBooksWindow.INSTANCE.init();
-//				}
-//				ControllerInterface ci = new SystemController();
-//				List<String> ids = ci.allBookIds();
-//				Collections.sort(ids);
-//				StringBuilder sb = new StringBuilder();
-//				for(String s: ids) {
-//					sb.append(s + "\n");
-//				}
-//				AllBooksWindow.INSTANCE.setData(sb.toString());
-//				AllBooksWindow.INSTANCE.show();
-//            }
-//		});
-//		
-//		MenuItem memberIds = new MenuItem("All Member Ids");
-//		memberIds.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent e) {
-//				hideAllWindows();
-//				if(!AllMembersWindow.INSTANCE.isInitialized()) {
-//					AllMembersWindow.INSTANCE.init();
-//				}
-//				ControllerInterface ci = new SystemController();
-//				List<String> ids = ci.allMemberIds();
-//				Collections.sort(ids);
-//				System.out.println(ids);
-//				StringBuilder sb = new StringBuilder();
-//				for(String s: ids) {
-//					sb.append(s + "\n");
-//				}
-//				System.out.println(sb.toString());
-//				AllMembersWindow.INSTANCE.setData(sb.toString());
-//				AllMembersWindow.INSTANCE.show();
-//            }
-//		});	
-//		optionsMenu.getItems().addAll(login, bookIds, memberIds);
-//
-//		mainMenu.getMenus().addAll(optionsMenu);
-//		Scene scene = new Scene(topContainer, 420, 375);
-//		primaryStage.setScene(scene);
-//		scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-//		primaryStage.show();
-	
+		if(SystemController.currentAuth==Auth.LIBRARIAN) {
+			addMenuLibrarian(mainMenu);
+		}
+		else if(SystemController.currentAuth==Auth.ADMIN) {
+			addMenuAdmin(mainMenu);
+		}
+		else if(SystemController.currentAuth==Auth.BOTH) {
+			addMenuBoth(mainMenu);
+		}
+		addMenuLogout(mainMenu);
+		Scene scene = new Scene(topContainer, 420, 375);
+		//primaryStage.setScene(scene);
+		//scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
+		//primaryStage.show();
+        setScene(scene);
 		
 	}
 	@Override
 	public boolean isInitialized() {
 		return this.isInitialized;
 	}
-
-	
-	
+	public void addMenuBoth(MenuBar mainMenu){
+		addMenuLibrarian(mainMenu);
+		addMenuAdmin(mainMenu);
+	}
+	public void addMenuLibrarian(MenuBar mainMenu) {
+		Menu optionsMenu = new Menu("Librarian");
+		
+		
+		MenuItem checkout = new MenuItem("Checkout");
+		checkout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				
+            }
+		});
+		MenuItem printCheckout = new MenuItem("Print Checkout Record");
+		printCheckout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				if(!PrintCheckoutRecordWindow.INSTANCE.isInitialized()) {
+					PrintCheckoutRecordWindow.INSTANCE.init();
+				}
+				PrintCheckoutRecordWindow.INSTANCE.show();
+            }
+		});
+		optionsMenu.getItems().addAll(checkout, printCheckout);
+		mainMenu.getMenus().addAll(optionsMenu);
+	}
+	public void addMenuAdmin(MenuBar mainMenu) {
+		Menu optionsMenu = new Menu("Admin");
+		
+		
+		MenuItem addMember = new MenuItem("Add Member");
+		addMember.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				
+            }
+		});
+		
+		MenuItem addBook = new MenuItem("Add Book");
+		addBook.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				if(!AddBookWindow.INSTANCE.isInitialized()) {
+					AddBookWindow.INSTANCE.init();
+				}
+				AddBookWindow.INSTANCE.show();
+            }
+		});	
+		MenuItem addCopy = new MenuItem("Add Copy");
+		addCopy.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				
+            }
+		});	
+		optionsMenu.getItems().addAll(addMember, addBook, addCopy);
+		mainMenu.getMenus().addAll(optionsMenu);
+	}
+	public void addMenuLogout(MenuBar mainMenu) {
+		Menu optionsMenu = new Menu("Exit");
+		MenuItem logout = new MenuItem("Logout");
+		logout.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+        	public void handle(ActionEvent e) {
+        		Start.hideAllWindows();
+        		Start.primStage().show();
+        	}
+		});
+		
+		optionsMenu.getItems().addAll(logout);
+		mainMenu.getMenus().addAll(optionsMenu);
+	}
 
 }

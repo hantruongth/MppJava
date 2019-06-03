@@ -1,6 +1,9 @@
 package ui;
 
+import business.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,7 +23,10 @@ public class Start extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	private Text messageBar = new Text();
+	public void clear() {
+		messageBar.setText("");
+	}
 	private static Stage primStage = null;
 
 	public static Stage primStage() {
@@ -32,8 +38,8 @@ public class Start extends Application {
 		static Color red = Color.FIREBRICK;
 	}
 
-	private static Stage[] allWindows = { LoginWindow.INSTANCE, AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE,
-			MainWindow.INSTANCE };
+	private static Stage[] allWindows = { AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE,
+			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
 
 	public static void hideAllWindows() {
 		primStage.hide();
@@ -44,7 +50,7 @@ public class Start extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
+		primStage = primaryStage;
 		primaryStage.setTitle("LibrarySystem Welcome");
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
@@ -79,26 +85,27 @@ public class Start extends Application {
 		hbBtn.getChildren().add(loginBtn);
 		grid.add(hbBtn, 1, 4);
 
-//        HBox messageBox = new HBox(10);
-//        messageBox.setAlignment(Pos.BOTTOM_RIGHT);
-//        messageBox.getChildren().add(messageBar);;
-//        grid.add(messageBox, 1, 6);
-//        
-//        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-//        	@Override
-//        	public void handle(ActionEvent e) {
-//        		try {
-//        			ControllerInterface c = new SystemController();
-//        			c.login(userTextField.getText().trim(), pwBox.getText().trim());
-//        			messageBar.setFill(Start.Colors.green);
-//             	    messageBar.setText("Login successful");
-//        		} catch(LoginException ex) {
-//        			messageBar.setFill(Start.Colors.red);
-//        			messageBar.setText("Error! " + ex.getMessage());
-//        		}
-//        	   
-//        	}
-//        });
+        HBox messageBox = new HBox(10);
+        messageBox.setAlignment(Pos.BOTTOM_RIGHT);
+        messageBox.getChildren().add(messageBar);;
+        grid.add(messageBox, 1, 6);
+        
+        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override
+        	public void handle(ActionEvent e) {
+        		try {
+        			ControllerInterface c = new SystemController();
+        			c.login(userTextField.getText().trim(), pwBox.getText().trim());
+        			messageBar.setFill(Start.Colors.green);
+             	    messageBar.setText("Login successful");
+             	   backToMain();
+        		} catch(LoginException ex) {
+        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setText("Error! " + ex.getMessage());
+        		}
+        	   
+        	}
+        });
 //
 //        Button backBtn = new Button("<= Back to Main");
 //        backBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -112,10 +119,18 @@ public class Start extends Application {
 //        hBack.setAlignment(Pos.BOTTOM_LEFT);
 //        hBack.getChildren().add(backBtn);
 //        grid.add(hBack, 0, 7);
+        
 		Scene scene = new Scene(grid);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
 	}
-
+	public static void backToMain() {
+		hideAllWindows();
+		if(!MainWindow.INSTANCE.isInitialized()) {
+			MainWindow.INSTANCE.init();
+		}
+		MainWindow.INSTANCE.clear();
+		MainWindow.INSTANCE.show();
+	}
 }
