@@ -87,13 +87,19 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 		grid.add(authorLabel, 0, 5);
 
 		
-		TableColumn<Author, String> authortNameCol 
-		  = new TableColumn<>("Author");
-		authortNameCol.setMinWidth(250);
-		authortNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("firstName"));
-		authortNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		TableColumn<Author, String> authortFirstNameCol = new TableColumn<>("First name");
+		authortFirstNameCol.setMinWidth(150);
+		authortFirstNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("firstName"));
+		authortFirstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		
-		tableAuthorView.getColumns().addAll(authortNameCol);
+		TableColumn<Author, String> authortLastNameCol = new TableColumn<>("Last name");
+		authortLastNameCol.setMinWidth(150);
+		authortLastNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("firstName"));
+		authortLastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		
+		tableAuthorView.getColumns().clear();
+		tableAuthorView.getColumns().addAll(authortFirstNameCol, authortLastNameCol);
 		grid.add(tableAuthorView, 1, 5);
 		
 		Button loginBtn = new Button("Save");
