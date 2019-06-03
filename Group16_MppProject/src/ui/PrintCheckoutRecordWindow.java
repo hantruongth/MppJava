@@ -75,6 +75,11 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow{
 		grid.add(tableMemberView, 1, 3);
 		
 
+		Button printToConsoleBtn = new Button("Print to console");
+		HBox hbBtnPrint = new HBox(10);
+		hbBtnPrint.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtnPrint.getChildren().add(printToConsoleBtn);
+		grid.add(hbBtnPrint, 1, 4);
 		
 		Scene scene = new Scene(grid);
 	
