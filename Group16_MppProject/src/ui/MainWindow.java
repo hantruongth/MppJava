@@ -99,6 +99,28 @@ public static final MainWindow INSTANCE = new MainWindow();
 				
             }
 		});
+		
+		
+		MenuItem allbooks = new MenuItem("All Books");
+		checkout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	if(!BooksWindow.INSTANCE.isInitialized()) {
+            		BooksWindow.INSTANCE.init();
+            	}
+            	
+				ControllerInterface ci = new SystemController();
+				List<String> ids = ci.allMemberIds();
+				Collections.sort(ids);
+				System.out.println(ids);
+				StringBuilder sb = new StringBuilder();
+				for(String s: ids) {
+					sb.append(s + "\n");
+				}
+            	BooksWindow.INSTANCE.show();
+            }
+		});
+		
 		MenuItem printCheckout = new MenuItem("Print Checkout Record");
 		printCheckout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -130,7 +152,6 @@ public static final MainWindow INSTANCE = new MainWindow();
 		addBook.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-            	//Start.hideAllWindows();
 				if(!AddBookWindow.INSTANCE.isInitialized()) {
 					AddBookWindow.INSTANCE.init();
 				}
@@ -148,6 +169,7 @@ public static final MainWindow INSTANCE = new MainWindow();
 		optionsMenu.getItems().addAll(addMember, addBook, addCopy);
 		mainMenu.getMenus().addAll(optionsMenu);
 	}
+	
 	public void addMenuLogout(MenuBar mainMenu) {
 		Menu optionsMenu = new Menu("Exit");
 		MenuItem logout = new MenuItem("Logout");
