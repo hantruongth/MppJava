@@ -41,7 +41,7 @@ public class Start extends Application {
 	}
 
 	private static Stage[] allWindows = { AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE,
-			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
+			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE, ConsoleViewWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
 
 	public static void hideAllWindows() {
 		primStage.hide();

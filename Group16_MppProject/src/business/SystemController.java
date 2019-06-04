@@ -1,6 +1,7 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +67,25 @@ public class SystemController implements ControllerInterface {
 	}
 	
 
+	@Override
+	public List<LibraryMember> getLibraryMember(String memberId) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+
+		// search by memberID
+		if (memberId != null) {
+			LibraryMember member = memberMap.get(memberId);
+			return Arrays.asList(member);
+		}
+		return new ArrayList<>(memberMap.values());
+		
+	}
+	@Override
+	public List<LibraryMember> getAllLibraryMember() {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+		return new ArrayList<>(memberMap.values());
+	}
 	
 	
 	

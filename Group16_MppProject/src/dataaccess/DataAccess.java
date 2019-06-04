@@ -18,4 +18,6 @@ public interface DataAccess {
 	public void saveBook(Book book);
 
 	public HashMap<String, Author> readAuthorMap();
+	
+	public String getCheckoutRecord(String memberId);
 }

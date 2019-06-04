@@ -10,4 +10,8 @@ public interface ControllerInterface {
 	public List<LibraryMember> allLibraryMembers();
 	public void addBook(Book book);
 	public void addLibraryMember(LibraryMember member);
+	public List<LibraryMember> getLibraryMember(String memberId);
+	public List<LibraryMember> getAllLibraryMember();
+	
+	
 }

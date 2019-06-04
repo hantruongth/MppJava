@@ -1,13 +1,10 @@
 package ui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
+import business.ControllerInterface;
 import business.LibraryMember;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
+import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,6 +43,7 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 	@Override
 	public void init() {
 		this.setTitle("LibrarySystem Print Checkout Record");
+		ControllerInterface c = new SystemController();
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -83,20 +82,18 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 
 		TableColumn<LibraryMember, String> memberLastNameCol = new TableColumn<>("Last name");
 		memberLastNameCol.setMinWidth(150);
-		memberLastNameCol.setCellValueFactory(new PropertyValueFactory<LibraryMember, String>("firstName"));
+		memberLastNameCol.setCellValueFactory(new PropertyValueFactory<LibraryMember, String>("lastName"));
 		memberLastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		tableMemberView.getColumns().clear();
 		tableMemberView.getColumns().addAll(memberIdCol, memberFirstNameCol, memberLastNameCol);
 		grid.add(tableMemberView, 1, 3);
 
-		this.bindMemberToList(getLibraryMember(null));
+		this.bindMemberToList(c.getAllLibraryMember());
 
-		Button printToConsoleBtn = new Button("Print to console");
-		HBox hbBtnPrint = new HBox(10);
-		hbBtnPrint.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtnPrint.getChildren().add(printToConsoleBtn);
-		grid.add(hbBtnPrint, 1, 4);
+		Label printToConsoleLabel = new Label("Hint: Double click on member to print checkout details");
+	
+		grid.add(printToConsoleLabel, 1, 4);
 
 		Scene scene = new Scene(grid);
 
@@ -108,27 +105,28 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 			public void handle(ActionEvent event) {
 				String memberId = memberIdTextField.getText();
 				if (memberId != null && !memberId.isEmpty()) {
-					bindMemberToList(getLibraryMember(memberId));
+					bindMemberToList(c.getLibraryMember(memberId));
 				} else {
-					bindMemberToList(getLibraryMember(null));
+					bindMemberToList(c.getAllLibraryMember());
 
 				}
 
 			}
 		});
+		
+		tableMemberView.setRowFactory( tv -> {
+    	    TableRow<LibraryMember> row = new TableRow<>();
+    	    row.setOnMouseClicked(event -> {
+    	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+    	        	LibraryMember member = row.getItem();
+    	        	ConsoleViewWindow.INSTANCE.init();
+    	        	ConsoleViewWindow.INSTANCE.setValue(member.getMemberId());
+    				ConsoleViewWindow.INSTANCE.show();
+    	        }
+    	    });
+    	    return row ;
+    	});
 
-	}
-
-	private List<LibraryMember> getLibraryMember(String memberId) {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
-
-		// search by memberID
-		if (memberId != null) {
-			LibraryMember member = memberMap.get(memberId);
-			return Arrays.asList(member);
-		}
-		return new ArrayList<>(memberMap.values());
 	}
 
 	private void bindMemberToList(List<LibraryMember> members) {
