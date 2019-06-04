@@ -11,6 +11,8 @@ import java.util.List;
 
 import business.Book;
 import business.BookCopy;
+import business.CheckoutEntry;
+import business.CheckoutRecord;
 import business.LibraryMember;
 import dataaccess.DataAccessFacade.StorageType;
 
@@ -18,7 +20,12 @@ import dataaccess.DataAccessFacade.StorageType;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS;
+		BOOKS,
+		MEMBERS,
+		CHECKOUTRECORD,
+		CHECKOUTENTRY,
+		USERS,
+		
 	}
 	
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
@@ -32,6 +39,23 @@ public class DataAccessFacade implements DataAccess {
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
+	
+	public void saveNewCheckoutRecord(CheckoutRecord record) {
+		HashMap<String, CheckoutRecord> records = readCheckoutRecordMap();
+		String recordId = record.getId();
+		records.put(recordId, record);
+		saveToStorage(StorageType.MEMBERS, records);	
+	}
+	
+	
+	
+	public void saveNewCheckoutEntry(CheckoutEntry entry) {
+		HashMap<String, CheckoutEntry> entries = readEntryRecordMap();
+		String entryId = entry.getId();
+		entries.put(entryId, entry);
+		saveToStorage(StorageType.CHECKOUTENTRY, entries);	
+	}
+	
 	
 	
 	public void saveBook(Book book) {
@@ -55,6 +79,27 @@ public class DataAccessFacade implements DataAccess {
 		return (HashMap<String, LibraryMember>) readFromStorage(
 				StorageType.MEMBERS);
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, CheckoutRecord> readCheckoutRecordMap() {
+		//Returns a Map with name/value pairs being
+		//   memberId -> LibraryMember
+		return (HashMap<String, CheckoutRecord>) readFromStorage(
+				StorageType.CHECKOUTRECORD);
+	}
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, CheckoutEntry> readEntryRecordMap() {
+		//Returns a Map with name/value pairs being
+		//   memberId -> LibraryMember
+		return (HashMap<String, CheckoutEntry>) readFromStorage(
+				StorageType.CHECKOUTENTRY);
+	}
+	
 	
 	
 	@SuppressWarnings("unchecked")
