@@ -2,8 +2,10 @@ package ui;
 
 import java.sql.Savepoint;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import business.Author;
 import business.Book;
@@ -20,7 +22,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -120,6 +124,7 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 		authorPhoneNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		tableAuthorView.getColumns().clear();
+		tableAuthorView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableAuthorView.getColumns().addAll(authortFirstNameCol, authortLastNameCol, authorPhoneNameCol);
 		grid.add(tableAuthorView, 1, 5);
 		
@@ -164,19 +169,27 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 				if(numberOfCopiesString != null)
 					nbOfcopy = Integer.parseInt(numberOfCopiesString);
 				
+				Collection<Author> authors = tableAuthorView.getSelectionModel().getSelectedItems();
+				
 				ControllerInterface c = new SystemController();
-				Book book = new Book(isbn, title, maxLength, new ArrayList<>());
+				Book book = new Book(isbn, title, maxLength, new ArrayList<>(authors));
 				for(int i=0; i< nbOfcopy; i++)
 					book.addCopy();
+				
+				
 				c.addBook(book);
 				
-				
+				Alert savedAlert = new Alert(AlertType.INFORMATION);
+				savedAlert.setHeaderText("The book was saved successfully.");
+				Optional<ButtonType> option = savedAlert.showAndWait();
+                
+                if (option.get() == ButtonType.OK) {
+                	init();
+                }
 				
 			}
 		});
         
-        
-		
 	}
 	
 	private void showErrorMessage(String errorMsg) {
