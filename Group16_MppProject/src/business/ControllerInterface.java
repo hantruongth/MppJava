@@ -7,6 +7,7 @@ public interface ControllerInterface {
 	public List<String> allMemberIds();
 	public List<String> allBookIds();
 	public List<Author> allAuthors();
+	public List<LibraryMember> allLibraryMembers();
 	public void addBook(Book book);
-	
+	public void addLibraryMember(LibraryMember member);
 }

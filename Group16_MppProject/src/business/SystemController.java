@@ -52,6 +52,18 @@ public class SystemController implements ControllerInterface {
 		DataAccess da =  new DataAccessFacade();
 		da.saveBook(book);
 	}
+	@Override
+	public void addLibraryMember(LibraryMember member) {
+		DataAccess da =  new DataAccessFacade();
+		da.saveNewMember(member);
+	}
+	@Override
+	public List<LibraryMember> allLibraryMembers() {
+		// TODO Auto-generated method stub
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> memberHashMap = da.readMemberMap();
+		return new ArrayList<>(memberHashMap.values());
+	}
 	
 
 	
