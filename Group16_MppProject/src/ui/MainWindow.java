@@ -73,10 +73,9 @@ public static final MainWindow INSTANCE = new MainWindow();
 		}
 		addMenuLogout(mainMenu);
 		Scene scene = new Scene(topContainer, 420, 375);
-		//primaryStage.setScene(scene);
-		//scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-		//primaryStage.show();
+		
         setScene(scene);
+        setMaximized(true);
 		
 	}
 	@Override

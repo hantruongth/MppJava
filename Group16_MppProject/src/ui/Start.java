@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -70,6 +72,7 @@ public class Start extends Application {
 		grid.add(userName, 0, 1);
 
 		TextField userTextField = new TextField();
+		
 		grid.add(userTextField, 1, 1);
 
 		Label pw = new Label("Password:");
@@ -93,37 +96,45 @@ public class Start extends Application {
         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
-        		try {
-        			ControllerInterface c = new SystemController();
-        			c.login(userTextField.getText().trim(), pwBox.getText().trim());
-        			messageBar.setFill(Start.Colors.green);
-             	    messageBar.setText("Login successful");
-             	   backToMain();
-        		} catch(LoginException ex) {
-        			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
-        		}
-        	   
+        		doLogin(userTextField.getText().trim(), pwBox.getText().trim());
         	}
         });
-//
-//        Button backBtn = new Button("<= Back to Main");
-//        backBtn.setOnAction(new EventHandler<ActionEvent>() {
-//        	@Override
-//        	public void handle(ActionEvent e) {
-//        		Start.hideAllWindows();
-//        		Start.primStage().show();
-//        	}
-//        });
-//        HBox hBack = new HBox(10);
-//        hBack.setAlignment(Pos.BOTTOM_LEFT);
-//        hBack.getChildren().add(backBtn);
-//        grid.add(hBack, 0, 7);
+        userTextField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	        @Override
+	        public void handle(KeyEvent ke)
+	        {
+	            if (ke.getCode().equals(KeyCode.ENTER)) {
+	            	doLogin(userTextField.getText().trim(), pwBox.getText().trim());
+	            }
+	        }
+	    });
+        pwBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	        @Override
+	        public void handle(KeyEvent ke)
+	        {
+	            if (ke.getCode().equals(KeyCode.ENTER)) {
+	            	doLogin(userTextField.getText().trim(), pwBox.getText().trim());
+	            }
+	        }
+	    });
+
         
 		Scene scene = new Scene(grid);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
+	}
+	public void doLogin(String id, String pw) {
+		try {
+			ControllerInterface c = new SystemController();
+			c.login(id, pw);
+			messageBar.setFill(Start.Colors.green);
+     	    messageBar.setText("Login successful");
+     	   backToMain();
+		} catch(LoginException ex) {
+			messageBar.setFill(Start.Colors.red);
+			messageBar.setText("Error! " + ex.getMessage());
+		}
 	}
 	public static void backToMain() {
 		hideAllWindows();
