@@ -1,6 +1,15 @@
 package ui;
 
-import business.Author;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import business.LibraryMember;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,16 +28,20 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class PrintCheckoutRecordWindow extends Stage implements LibWindow{
+public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 	public static final PrintCheckoutRecordWindow INSTANCE = new PrintCheckoutRecordWindow();
-	private TableView<Author> tableMemberView = new TableView<Author>();
+	private TableView<LibraryMember> tableMemberView = new TableView<LibraryMember>();
 	private boolean isInitialized = false;
+
 	public boolean isInitialized() {
 		return isInitialized;
 	}
+
 	public void isInitialized(boolean val) {
 		isInitialized = val;
 	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 		this.setTitle("LibrarySystem Print Checkout Record");
@@ -45,47 +58,82 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow{
 		labelBox.setAlignment(Pos.CENTER);
 		labelBox.getChildren().add(label);
 		grid.add(labelBox, 0, 0, 2, 1);
-		
-		
+
 		Label memberIdLabel = new Label("Member Id:");
 		grid.add(memberIdLabel, 0, 1);
 
 		TextField memberIdTextField = new TextField();
 		grid.add(memberIdTextField, 1, 1);
-		
+
 		Button searchMemberBtn = new Button("Search member");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(searchMemberBtn);
 		grid.add(hbBtn, 1, 2);
-		
-		
-		TableColumn<Author, String> memberFirstNameCol = new TableColumn<>("First name");
+
+		TableColumn<LibraryMember, String> memberIdCol = new TableColumn<>("ID");
+		memberIdCol.setMinWidth(150);
+		memberIdCol.setCellValueFactory(new PropertyValueFactory<LibraryMember, String>("memberId"));
+		memberIdCol.setCellFactory(TextFieldTableCell.forTableColumn());
+
+		TableColumn<LibraryMember, String> memberFirstNameCol = new TableColumn<>("First name");
 		memberFirstNameCol.setMinWidth(150);
-		memberFirstNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("firstName"));
+		memberFirstNameCol.setCellValueFactory(new PropertyValueFactory<LibraryMember, String>("firstName"));
 		memberFirstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		
-		TableColumn<Author, String> memberLastNameCol = new TableColumn<>("Last name");
+
+		TableColumn<LibraryMember, String> memberLastNameCol = new TableColumn<>("Last name");
 		memberLastNameCol.setMinWidth(150);
-		memberLastNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("firstName"));
+		memberLastNameCol.setCellValueFactory(new PropertyValueFactory<LibraryMember, String>("firstName"));
 		memberLastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		
+
 		tableMemberView.getColumns().clear();
-		tableMemberView.getColumns().addAll(memberFirstNameCol, memberLastNameCol);
+		tableMemberView.getColumns().addAll(memberIdCol, memberFirstNameCol, memberLastNameCol);
 		grid.add(tableMemberView, 1, 3);
-		
+
+		this.bindMemberToList(getLibraryMember(null));
 
 		Button printToConsoleBtn = new Button("Print to console");
 		HBox hbBtnPrint = new HBox(10);
 		hbBtnPrint.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtnPrint.getChildren().add(printToConsoleBtn);
 		grid.add(hbBtnPrint, 1, 4);
-		
+
 		Scene scene = new Scene(grid);
-	
-        setScene(scene);
-		
-		
+
+		setScene(scene);
+
+		searchMemberBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String memberId = memberIdTextField.getText();
+				if (memberId != null && !memberId.isEmpty()) {
+					bindMemberToList(getLibraryMember(memberId));
+				} else {
+					bindMemberToList(getLibraryMember(null));
+
+				}
+
+			}
+		});
+
 	}
-	
+
+	private List<LibraryMember> getLibraryMember(String memberId) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+
+		// search by memberID
+		if (memberId != null) {
+			LibraryMember member = memberMap.get(memberId);
+			return Arrays.asList(member);
+		}
+		return new ArrayList<>(memberMap.values());
+	}
+
+	private void bindMemberToList(List<LibraryMember> members) {
+		this.tableMemberView.getItems().clear();
+		this.tableMemberView.getItems().setAll(members);
+	}
+
 }
