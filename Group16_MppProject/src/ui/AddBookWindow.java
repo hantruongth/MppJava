@@ -1,6 +1,10 @@
 package ui;
 
+import java.util.HashMap;
+
 import business.Author;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -111,7 +115,17 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 		Scene scene = new Scene(grid);
 	
         setScene(scene);
+        
+        this.bindAuthorToList();
 		
+	}
+	
+
+	private void bindAuthorToList() {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, Author> authorHashMap = da.readAuthorMap();
+		this.tableAuthorView.getItems().clear();
+		this.tableAuthorView.getItems().setAll(authorHashMap.values());
 	}
 
 }
