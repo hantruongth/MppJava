@@ -1,12 +1,19 @@
 package ui;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import business.Book;
+import business.CheckoutEntry;
+import business.CheckoutRecord;
+import business.ControllerInterface;
+import business.LibraryMember;
+import business.MemberCheckoutsFactory;
+import business.SystemController;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import javafx.event.ActionEvent;
@@ -15,6 +22,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -22,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 
@@ -40,6 +50,7 @@ public class BooksListTable {
     final Image unavailableImage = new Image("/ui/unavailable.png");
     
     DataAccess da = new DataAccessFacade();
+    ControllerInterface ci = new SystemController();
     
     
     @FXML
@@ -76,36 +87,72 @@ public class BooksListTable {
     	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
     	            Book rowData = row.getItem();
     	            
-    	            if (rowData.getAvailable() == true) {
+    	            StringBuilder sb = new StringBuilder("The book: \n");
+	        		sb.append("ISBN: " + rowData.getIsbn() + "\n");
+	        		sb.append("Title: " + rowData.getTitle() + "\n");
+	        		sb.append("Authors: " + rowData.getAuthors() + "\n");
+	        		
+    	            if (rowData.getAvailable() == false) {
     	            	
-    	            	StringBuilder sb = new StringBuilder("The book: \n");
-    	        		sb.append("ISBN: " + rowData.getIsbn() + "\n");
-    	        		sb.append("Title: " + rowData.getTitle() + "\n");
-    	        		sb.append("Authors: " + rowData.getAuthors() + "\n");
     	        		sb.append("is not Available");
     	        			
-    	            	Alert alert = new Alert(AlertType.WARNING,
+    	            	Alert alert = new Alert(AlertType.INFORMATION,
     	            			sb.toString());
     	            	
     	            	alert.show(); 
+    	            }else {
+    	            	
+    	            	sb.append("is Available");
+    	        	
+    	        		List<LibraryMember> membersList = ci.allMemebers();
+//    	        		membersList.add(0, null);
+    	        		
+    	            	
+    	            	ChoiceDialog<LibraryMember> dialog = new ChoiceDialog<LibraryMember>(null, membersList);
+    	            	
+    	            	dialog.setTitle("Checkout a Book");
+    	            	dialog.setHeaderText(sb.toString());
+    	            	dialog.setContentText("Select a Member:");
+    	            	 
+    	            	Optional<LibraryMember> result = dialog.showAndWait();
+    	            	
+    	            	if (result.isPresent()) {
+    	            		result.ifPresent(member -> {
+    	            			
+    	            			CheckoutRecord record = MemberCheckoutsFactory.createCheckoutRecord(member, LocalDate.now());
+    	            			CheckoutEntry entry = MemberCheckoutsFactory.createCheckoutEntry(record, rowData.getNextAvailableCopy(), LocalDate.now());
+    	            			
+//        	            		System.out.println(rowData.getNextAvailableCopy());
+//        	            		System.out.println(rowData);
+//        	            		System.out.println(member);
+    	            			
+        	                });
+    	            	}else {
+    	            		
+        	        		
+    	            		System.out.println(result);
+        	        		Label label = new Label("You must select a Member!!");
+
+        	        		GridPane expContent = new GridPane();
+        	        		expContent.setMaxWidth(Double.MAX_VALUE);
+        	        		expContent.add(label, 0, 0);
+        	        		dialog.getDialogPane().setExpandableContent(expContent);
+        	        		dialog.getDialogPane().setExpanded(true);
+        	        		dialog.show();
+        	        		
+    	            	}
+    	            	
+    	            	
     	            }
     	        }
     	    });
     	    return row ;
     	});
     	
-        tableView.getItems().setAll(parseUserList());
+        tableView.getItems().setAll(ci.allBooks());
         addButtonToTable();
     }
     
-    private List<Book> parseUserList(){
-    	
-		Collection<Book> books = da.readBooksMap().values();	
-		List<Book> bs = new ArrayList<>();
-		bs.addAll(books);
-		
-    	return bs;
-	}
     
     private void addButtonToTable() {
         TableColumn<Book, Void> colBtn = new TableColumn("Button Column");
@@ -131,8 +178,7 @@ public class BooksListTable {
         	        		alert.setHeaderText("Are you sure want to make a copy?");
         	        		
                             alert.setContentText(sb.toString());
-                       
-                            // option != null.
+                            
                             Optional<ButtonType> option = alert.showAndWait();
                        
                             if (option.get() == ButtonType.OK) {
@@ -140,8 +186,7 @@ public class BooksListTable {
                             	data.addCopy();
                             	da.saveBook(data);
                             	tableView.getItems().clear();
-                            	tableView.getItems().setAll(parseUserList());	
-                            	
+                            	tableView.getItems().setAll(ci.allBooks());	
                             }
                             
                             System.out.println("selectedData: " + data);
