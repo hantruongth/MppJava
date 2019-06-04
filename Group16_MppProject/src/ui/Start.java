@@ -41,7 +41,7 @@ public class Start extends Application {
 	}
 
 	private static Stage[] allWindows = { AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE,
-			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
+			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE, ConsoleViewWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
 
 	public static void hideAllWindows() {
 		primStage.hide();
@@ -72,7 +72,7 @@ public class Start extends Application {
 		grid.add(userName, 0, 1);
 
 		TextField userTextField = new TextField();
-		
+		userTextField.setText("both");
 		grid.add(userTextField, 1, 1);
 
 		Label pw = new Label("Password:");
@@ -80,6 +80,7 @@ public class Start extends Application {
 		grid.setGridLinesVisible(false);
 
 		PasswordField pwBox = new PasswordField();
+		pwBox.setText("123456");
 		grid.add(pwBox, 1, 2);
 
 		Button loginBtn = new Button("Log in");

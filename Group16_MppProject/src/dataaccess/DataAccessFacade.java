@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
+import business.Author;
 import business.Book;
 import business.BookCopy;
 import business.CheckoutEntry;
@@ -20,12 +21,13 @@ import dataaccess.DataAccessFacade.StorageType;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
+
 		BOOKS,
 		MEMBERS,
 		CHECKOUTRECORD,
 		CHECKOUTENTRY,
 		USERS,
-		
+		AUTHORS
 	}
 	
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
@@ -131,6 +133,17 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, members);
 	}
 	
+	static void loadAuthorMap(List<Author> allAuthors) {
+		HashMap<String, Author> authors = new HashMap<>();
+		allAuthors.forEach(author-> authors.put(author.toString(), author));
+		saveToStorage(StorageType.AUTHORS, authors);
+	}
+	@SuppressWarnings("unchecked")
+	public HashMap<String, Author> readAuthorMap(){
+		return (HashMap<String,Author>) readFromStorage(StorageType.AUTHORS);
+	}
+	
+	
 	static void saveToStorage(StorageType type, Object ob) {
 		ObjectOutputStream out = null;
 		try {
@@ -196,6 +209,14 @@ public class DataAccessFacade implements DataAccess {
 			return "(" + first.toString() + ", " + second.toString() + ")";
 		}
 		private static final long serialVersionUID = 5399827794066637059L;
+	}
+
+
+
+	@Override
+	public String getCheckoutRecord(String memberId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

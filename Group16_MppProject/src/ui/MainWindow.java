@@ -142,8 +142,10 @@ public static final MainWindow INSTANCE = new MainWindow();
 		addMember.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-            	//Start.hideAllWindows();
-				
+            	if(!AddMemberWindow.INSTANCE.isInitialized()) {
+            		AddMemberWindow.INSTANCE.init();
+				}
+            	AddMemberWindow.INSTANCE.show();
             }
 		});
 		

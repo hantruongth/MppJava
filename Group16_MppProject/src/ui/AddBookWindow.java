@@ -1,15 +1,34 @@
 package ui;
 
+import java.sql.Savepoint;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Optional;
+
 import business.Author;
+import business.Book;
+import business.ControllerInterface;
+import business.SystemController;
+import business.constant.Constants;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -38,6 +57,7 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 		tableAuthorView.setItems(prods);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 		
@@ -98,20 +118,92 @@ private TableView<Author> tableAuthorView = new TableView<Author>();
 		authortLastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		
 		
+		TableColumn<Author, String> authorPhoneNameCol = new TableColumn<>("Phone");
+		authorPhoneNameCol.setMinWidth(150);
+		authorPhoneNameCol.setCellValueFactory(new PropertyValueFactory<Author, String>("telephone"));
+		authorPhoneNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		
 		tableAuthorView.getColumns().clear();
-		tableAuthorView.getColumns().addAll(authortFirstNameCol, authortLastNameCol);
+		tableAuthorView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		tableAuthorView.getColumns().addAll(authortFirstNameCol, authortLastNameCol, authorPhoneNameCol);
 		grid.add(tableAuthorView, 1, 5);
 		
-		Button loginBtn = new Button("Save");
+		Button saveBtn = new Button("Save");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(loginBtn);
+		hbBtn.getChildren().add(saveBtn);
 		grid.add(hbBtn, 1, 6);
 		
 		Scene scene = new Scene(grid);
 	
         setScene(scene);
-		
+        
+        this.bindAuthorToList();
+        
+        saveBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				String isbn = isbnTextField.getText();
+				String title = titleTextField.getText();
+				String maxCheckoutLengthString = checkoutLengthTextField.getText();
+				
+				if(isbn.equals("") || title.equals("") || maxCheckoutLengthString.equals("")) {
+					showErrorMessage("Please input all fields");
+					return;
+				}
+				
+				int maxLength = Constants.MAX_DAY_BOOK_BORROWING;
+				if(maxCheckoutLengthString != null)
+				{
+					try {
+						maxLength = Integer.parseInt(maxCheckoutLengthString);
+					}catch (NumberFormatException e) {
+						showErrorMessage("Max. Checkout Length is the number");
+						return;
+					}
+					
+				}
+				String numberOfCopiesString = nbCopiesTextField.getText();
+				int nbOfcopy = 1;
+				if(numberOfCopiesString != null)
+					nbOfcopy = Integer.parseInt(numberOfCopiesString);
+				
+				Collection<Author> authors = tableAuthorView.getSelectionModel().getSelectedItems();
+				
+				ControllerInterface c = new SystemController();
+				Book book = new Book(isbn, title, maxLength, new ArrayList<>(authors));
+				for(int i=0; i< nbOfcopy; i++)
+					book.addCopy();
+				
+				
+				c.addBook(book);
+				
+				Alert savedAlert = new Alert(AlertType.INFORMATION);
+				savedAlert.setHeaderText("The book was saved successfully.");
+				Optional<ButtonType> option = savedAlert.showAndWait();
+                
+                if (option.get() == ButtonType.OK) {
+                	init();
+                }
+				
+			}
+		});
+        
+	}
+	
+	private void showErrorMessage(String errorMsg) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Input error");
+		alert.setHeaderText(errorMsg);
+		alert.show();
+	}
+	
+
+	private void bindAuthorToList() {
+		ControllerInterface c = new SystemController();
+		this.tableAuthorView.getItems().clear();
+		this.tableAuthorView.getItems().setAll(c.allAuthors());
 	}
 
 }
