@@ -219,6 +219,9 @@ public class AddMemberWindow extends Stage implements LibWindow{
 		this.tableMemberView.getItems().setAll(members);
 	}
 	private void addNewMember(LibraryMember newMember) {
+		if(newMember.getMemberId().isEmpty())
+			return;
+
 		c.addLibraryMember(newMember);
 	}
 	private void doSelectMember() {
