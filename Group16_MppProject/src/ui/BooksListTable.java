@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import business.Book;
+import business.BookCopy;
 import business.CheckoutEntry;
 import business.CheckoutRecord;
 import business.ControllerInterface;
@@ -105,6 +106,7 @@ public class BooksListTable {
     	            	sb.append("is Available");
     	        	
     	        		List<LibraryMember> membersList = ci.allMemebers();
+    	        		System.out.println(membersList);
 //    	        		membersList.add(0, null);
     	        		
     	            	
@@ -119,8 +121,11 @@ public class BooksListTable {
     	            	if (result.isPresent()) {
     	            		result.ifPresent(member -> {
     	            			
+    	            			BookCopy copy = rowData.getNextAvailableCopy();
+    	            			
     	            			CheckoutRecord record = MemberCheckoutsFactory.createCheckoutRecord(member, LocalDate.now());
-    	            			CheckoutEntry entry = MemberCheckoutsFactory.createCheckoutEntry(record, rowData.getNextAvailableCopy(), LocalDate.now());
+    	            			CheckoutEntry entry = MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
+    	            			copy.changeAvailability();
     	            			
 //        	            		System.out.println(rowData.getNextAvailableCopy());
 //        	            		System.out.println(rowData);
