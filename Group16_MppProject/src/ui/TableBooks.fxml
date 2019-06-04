@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="619.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="619.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.BooksListTable">
    <children>
       <SplitPane dividerPositions="0.09868421052631579" layoutX="7.0" layoutY="8.0" orientation="VERTICAL" prefHeight="610.0" prefWidth="820.0">
         <items>
@@ -15,13 +15,12 @@
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TableView prefHeight="544.0" prefWidth="818.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tableView" prefHeight="544.0" prefWidth="818.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Id" />
-                        <TableColumn prefWidth="75.0" text="# Copies" />
-                      <TableColumn prefWidth="75.0" text="ISBN" />
-                        <TableColumn prefWidth="240.0" text="Title" />
-                        <TableColumn prefWidth="264.0" text="Authors" />
+                      <TableColumn fx:id="isbn" prefWidth="75.0" text="ISBN" />
+                        <TableColumn fx:id="title" prefWidth="240.0" text="Title" />
+                        <TableColumn fx:id="authors" prefWidth="264.0" text="Authors" />
+                        <TableColumn fx:id="numCopies" prefWidth="75.0" text="# Copies" />
                     </columns>
                   </TableView>
                </children>
