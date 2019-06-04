@@ -96,6 +96,10 @@ final public class Book implements Serializable {
 		return isbn;
 	}
 	
+	public Boolean getAvailable() {
+		return this.isAvailable();
+	}
+	
 	public BookCopy getNextAvailableCopy() {	
 		Optional<BookCopy> optional 
 			= Arrays.stream(copies)
