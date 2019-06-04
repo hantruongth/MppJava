@@ -105,10 +105,7 @@ public class BooksListTable {
     	            	
     	            	sb.append("is Available");
     	        	
-    	        		List<LibraryMember> membersList = ci.allMemebers();
-    	        		System.out.println(membersList);
-//    	        		membersList.add(0, null);
-    	        		
+    	        		List<LibraryMember> membersList = ci.allMemebers();    	        		
     	            	
     	            	ChoiceDialog<LibraryMember> dialog = new ChoiceDialog<LibraryMember>(null, membersList);
     	            	
@@ -124,12 +121,13 @@ public class BooksListTable {
     	            			BookCopy copy = rowData.getNextAvailableCopy();
     	            			
     	            			CheckoutRecord record = MemberCheckoutsFactory.createCheckoutRecord(member, LocalDate.now());
-    	            			CheckoutEntry entry = MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
+    	            			MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
     	            			copy.changeAvailability();
-    	            			
-//        	            		System.out.println(rowData.getNextAvailableCopy());
-//        	            		System.out.println(rowData);
-//        	            		System.out.println(member);
+    	            			rowData.updateCopies(copy);
+    	            			da.saveBook(rowData);
+    	            			tableView.getItems().clear();
+    	            			tableView.getItems().setAll(ci.allBooks());
+    	            			System.out.println(rowData);
     	            			
         	                });
     	            	}else {
