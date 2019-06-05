@@ -2,17 +2,12 @@ package business;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-import java.util.Collection;
-
 import java.util.Arrays;
-
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import business.Book;
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
@@ -147,9 +142,35 @@ public class SystemController implements ControllerInterface {
 			checkoutEntriesMap.put(e.getDate(), existList);
 			
 		});
-//		if (checkoutRecordOfMember != null)
-//			return checkoutRecordOfMember.getEntries();
-		//return checkoutRecordOfMemb;
 		return checkoutEntriesMap;
 	}
+	@Override
+	public Map<LibraryMember, List<CheckoutEntry>> getCheckoutEntryList(String isbn) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, CheckoutRecord> checkoutHashMap = da.readCheckoutRecordMap();
+		Collection<CheckoutRecord> checkoutRecords = checkoutHashMap.values();
+		Map<LibraryMember, List<CheckoutEntry>> memberEntryMap = new HashMap<>();
+		checkoutRecords.forEach(e-> {
+			List<CheckoutEntry> overdueEntries = new ArrayList<>();
+			
+			List<CheckoutEntry> entries = e.getEntries();
+			
+			for (CheckoutEntry entry : entries) {
+				if(entry.getCopy().getBook().getIsbn().equalsIgnoreCase(isbn) && entry.getDueDate().isBefore(LocalDate.now())){
+					overdueEntries.add(entry);
+				}
+			}
+			
+			if(memberEntryMap.get(e.getMember()) != null) {
+				overdueEntries.addAll(memberEntryMap.get(e.getMember()));
+				memberEntryMap.put(e.getMember(), overdueEntries);
+			}
+			
+		});
+		
+		return memberEntryMap;
+	}
+	
+	 
+	
 }

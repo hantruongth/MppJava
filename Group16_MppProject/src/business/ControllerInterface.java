@@ -23,4 +23,6 @@ public interface ControllerInterface {
 	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry);
 	public Map<LocalDate, List<CheckoutEntry>> getCheckoutEntries(LibraryMember member);
 	
+	public Map<LibraryMember, List<CheckoutEntry>> getCheckoutEntryList(String isbn);
+	
 }

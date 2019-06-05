@@ -1,7 +1,12 @@
 package ui;
 
+import java.util.List;
+import java.util.Map;
+
 import business.Book;
+import business.CheckoutEntry;
 import business.ControllerInterface;
+import business.LibraryMember;
 import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,6 +43,7 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 
@@ -56,11 +62,11 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 		labelBox.getChildren().add(label);
 		grid.add(labelBox, 0, 0, 2, 1);
 
-		Label iSBNLabel = new Label("Member Id:");
+		Label iSBNLabel = new Label("ISBN:");
 		grid.add(iSBNLabel, 0, 1);
 
-		TextField memberIdTextField = new TextField();
-		grid.add(memberIdTextField, 1, 1);
+		TextField isbnTextField = new TextField();
+		grid.add(isbnTextField, 1, 1);
 
 		Button searchBookBtn = new Button("Overdue search");
 		HBox hbBtn = new HBox(10);
@@ -82,9 +88,21 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 		nbCopyCol.setMinWidth(150);
 		nbCopyCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
 		nbCopyCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<Book, String> memberIDCol = new TableColumn<>("Member ID");
+		memberIDCol.setMinWidth(150);
+		memberIDCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
+		memberIDCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		TableColumn<Book, String> memberNameCol = new TableColumn<>("Member name");
+		memberNameCol.setMinWidth(150);
+		memberNameCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
+		memberNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		
+		
 
 		tableMemberView.getColumns().clear();
-		//tableMemberView.getColumns().addAll(memberIdCol, memberFirstNameCol, memberLastNameCol);
+		tableMemberView.getColumns().addAll(isbnCol, titleCol, nbCopyCol, memberIDCol, memberNameCol);
 		grid.add(tableMemberView, 1, 3);
 
 		// this.bindMemberToList(c.getAllLibraryMember());
@@ -101,9 +119,12 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 			@Override
 			public void handle(ActionEvent event) {
-				String memberId = memberIdTextField.getText();
-				if (memberId != null && !memberId.isEmpty()) {
-					// bindMemberToList(c.getLibraryMember(memberId));
+				String isbn = isbnTextField.getText();
+				if (isbn != null && !isbn.isEmpty()) {
+					ControllerInterface ci = new SystemController();
+					Map<LibraryMember, List<CheckoutEntry>> memberChecoutEntryMap = ci.getCheckoutEntryList(isbn);
+					
+					
 				} else {
 					// bindMemberToList(c.getAllLibraryMember());
 
