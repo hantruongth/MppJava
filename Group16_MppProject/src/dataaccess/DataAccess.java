@@ -25,4 +25,6 @@ public interface DataAccess {
 	public HashMap<String, Author> readAuthorMap();
 	
 	public String getCheckoutRecord(String memberId);
+	public HashMap<String, CheckoutRecord> readCheckoutRecordMap();
+	public HashMap<String, CheckoutEntry> readEntryRecordMap();
 }

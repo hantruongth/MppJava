@@ -1,6 +1,10 @@
 package ui;
 
+import java.util.List;
+
+import business.CheckoutEntry;
 import business.ControllerInterface;
+import business.LibraryMember;
 import business.SystemController;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -9,7 +13,7 @@ import javafx.stage.Stage;
 
 public class ConsoleViewWindow extends Stage implements LibWindow {
 	public static final ConsoleViewWindow INSTANCE = new ConsoleViewWindow();
-	private String memberId;
+	private LibraryMember member;
 	private boolean isInitialized = false;
 
 	public boolean isInitialized() {
@@ -39,9 +43,11 @@ public class ConsoleViewWindow extends Stage implements LibWindow {
 		textarea.setPrefHeight(575);
 		textarea.setPrefWidth(595);
 
-		textarea.setText("han truong");
 		
+	
+		List<CheckoutEntry> checkoutEntries = ci.getCheckoutEntries(member);
 		
+		//textarea.setText(checkoutEntries.toString());
 		
 		panel.getChildren().add(textarea);
 
@@ -51,8 +57,8 @@ public class ConsoleViewWindow extends Stage implements LibWindow {
 
 	}
 
-	public void setValue(String memberId) {
-		this.memberId = memberId;
+	public void setValue(LibraryMember member) {
+		this.member = member;
 	}
 
 }

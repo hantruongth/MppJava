@@ -203,11 +203,11 @@ public class AddMemberWindow extends Stage implements LibWindow{
 		this.bindMemberToList(getLibraryMember());
 		
 		Screen screen = Screen.getPrimary();
-		//Rectangle2D bounds = screen.getVisualBounds();
+		Rectangle2D bounds = screen.getVisualBounds();
 
-		Scene scene = new Scene(grid/*, bounds.getWidth()/1.5, bounds.getHeight()/2*/);
+		Scene scene = new Scene(grid, bounds.getWidth()*0.5, bounds.getHeight()*0.955);
         setScene(scene);
-        setMaximized(true);
+        //setMaximized(true);
 	}
 	private List<LibraryMember> getLibraryMember() {
 		

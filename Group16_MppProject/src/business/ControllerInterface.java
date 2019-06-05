@@ -19,5 +19,6 @@ public interface ControllerInterface {
 	
 	public CheckoutRecord saveCheckoutRecord(CheckoutRecord record);
 	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry);
+	public List<CheckoutEntry> getCheckoutEntries(LibraryMember member);
 	
 }

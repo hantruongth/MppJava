@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import business.Book;
 import dataaccess.Auth;
@@ -124,4 +125,19 @@ public class SystemController implements ControllerInterface {
 		return new ArrayList<>(memberMap.values());
 	}
 	
+	@Override
+	public List<CheckoutEntry> getCheckoutEntries(LibraryMember member) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, CheckoutRecord> checkoutHashMap = da.readCheckoutRecordMap();
+		Collection<CheckoutRecord> checkoutRecords = checkoutHashMap.values();
+		List<CheckoutRecord> checkoutRecordOfMember = new ArrayList<>();
+		checkoutRecords.forEach(e->{
+			if(e.getMember().equals(member))
+				checkoutRecordOfMember.add(e);
+		});
+//		if (checkoutRecordOfMember != null)
+//			return checkoutRecordOfMember.getEntries();
+		//return checkoutRecordOfMemb;
+		return null;
+	}
 }
