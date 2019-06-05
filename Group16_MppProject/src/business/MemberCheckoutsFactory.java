@@ -26,7 +26,7 @@ public class MemberCheckoutsFactory {
 		ControllerInterface ci = new SystemController();
 		CheckoutEntry entry = new CheckoutEntry(record, copy, date);
 		ci.saveCheckoutEntry(entry);
-		System.out.println(entry);
+		record.addEntry(entry);
 		return entry;	
 	}
 

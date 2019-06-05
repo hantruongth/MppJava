@@ -26,4 +26,8 @@ public class CheckoutRecord implements Serializable  {
 	public String getId() {
 		return this.id;
 	}
+	
+	public void addEntry(CheckoutEntry entry){
+		entries.add(entry);
+	}
 }
