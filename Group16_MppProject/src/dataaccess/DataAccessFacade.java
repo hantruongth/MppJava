@@ -36,15 +36,35 @@ public class DataAccessFacade implements DataAccess {
 	
 	//implement: other save operations
 	public void saveNewMember(LibraryMember member) {
-		HashMap<String, LibraryMember> mems = readMemberMap();
+		
+		
+		HashMap<String, LibraryMember> mems;
+		try {
+			mems = readMemberMap();
+		}catch(Exception e) {
+			mems = new HashMap<String, LibraryMember>();
+		}
+		
+		if (mems == null) {
+			mems = new HashMap<String, LibraryMember>();
+		}
+		
 		String memberId = member.getMemberId();
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
 	
 	public void saveNewCheckoutRecord(CheckoutRecord record) {
-		HashMap<String, CheckoutRecord> records = readCheckoutRecordMap();
+		HashMap<String, CheckoutRecord> records;
+		try {
+			records = readCheckoutRecordMap();
+		}catch(Exception e) {
+			records = new HashMap<String, CheckoutRecord>();
+		}
 		String recordId = record.getId();
+		if (records == null) {
+			records = new HashMap<String, CheckoutRecord>();
+		}
 		records.put(recordId, record);
 		saveToStorage(StorageType.CHECKOUTRECORD, records);	
 	}
@@ -52,7 +72,15 @@ public class DataAccessFacade implements DataAccess {
 	
 	public void saveNewCheckoutEntry(CheckoutEntry entry) {
 		HashMap<String, CheckoutEntry> entries = readEntryRecordMap();
+		try {
+			entries = readEntryRecordMap();
+		}catch(Exception e) {
+			entries = new HashMap<String, CheckoutEntry>();
+		}
 		String entryId = entry.getId();
+		if (entries == null) {
+			entries = new HashMap<String, CheckoutEntry>();
+		}
 		entries.put(entryId, entry);
 		saveToStorage(StorageType.CHECKOUTENTRY, entries);	
 	}
@@ -62,6 +90,9 @@ public class DataAccessFacade implements DataAccess {
 	public void saveBook(Book book) {
 		HashMap<String, Book> books = readBooksMap();
 		String isbn = book.getIsbn();
+		if (books == null) {
+			books = new HashMap<String, Book>();
+		}
 		books.put(isbn, book);
 		saveToStorage(StorageType.BOOKS, books);	
 	}
@@ -168,7 +199,8 @@ public class DataAccessFacade implements DataAccess {
 			in = new ObjectInputStream(Files.newInputStream(path));
 			retVal = in.readObject();
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println("storage empty");
 		} finally {
 			if(in != null) {
 				try {

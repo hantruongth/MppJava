@@ -158,7 +158,8 @@ public static final MainWindow INSTANCE = new MainWindow();
 				}
 				AddBookWindow.INSTANCE.show();
             }
-		});	
+		});
+		
 		MenuItem addCopy = new MenuItem("Add Copy");
 		addCopy.setOnAction(new EventHandler<ActionEvent>() {
             @Override
