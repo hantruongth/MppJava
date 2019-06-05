@@ -113,19 +113,19 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 
 			}
 		});
-		
-		tableMemberView.setRowFactory( tv -> {
-    	    TableRow<LibraryMember> row = new TableRow<>();
-    	    row.setOnMouseClicked(event -> {
-    	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-    	        	LibraryMember member = row.getItem();
-    	        	ConsoleViewWindow.INSTANCE.setValue(member);
-    	        	ConsoleViewWindow.INSTANCE.init();
-    				ConsoleViewWindow.INSTANCE.show();
-    	        }
-    	    });
-    	    return row ;
-    	});
+
+		tableMemberView.setRowFactory(tv -> {
+			TableRow<LibraryMember> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					LibraryMember member = row.getItem();
+					ConsoleViewWindow.INSTANCE.setValue(member);
+					ConsoleViewWindow.INSTANCE.init();
+					ConsoleViewWindow.INSTANCE.show();
+				}
+			});
+			return row;
+		});
 
 	}
 

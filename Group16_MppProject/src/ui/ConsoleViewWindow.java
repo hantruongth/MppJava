@@ -33,7 +33,7 @@ public class ConsoleViewWindow extends Stage implements LibWindow {
 
 	@Override
 	public void init() {
-		
+
 		ControllerInterface ci = new SystemController();
 		AnchorPane panel = new AnchorPane();
 		panel.setPrefHeight(580);
@@ -46,25 +46,23 @@ public class ConsoleViewWindow extends Stage implements LibWindow {
 		textarea.setPrefHeight(575);
 		textarea.setPrefWidth(795);
 
-		
-	
 		Map<LocalDate, List<CheckoutEntry>> checkoutEntries = ci.getCheckoutEntries(member);
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("ID: ").append(member.getMemberId()).append("\n");
 		sb.append("Member name: ").append(member.getFirstName()).append(" ").append(member.getLastName()).append("\n");
 		sb.append("Checkout Details:\n");
-		
-		for(Entry<LocalDate, List<CheckoutEntry>> entry: checkoutEntries.entrySet()) {
+
+		for (Entry<LocalDate, List<CheckoutEntry>> entry : checkoutEntries.entrySet()) {
 			sb.append("  + ").append(entry.getKey()).append("\n");
 			List<CheckoutEntry> entries = entry.getValue();
 			for (CheckoutEntry checkoutEntry : entries) {
 				sb.append("        - ").append(checkoutEntry.toString());
 				sb.append("\n");
-				
+
 			}
 			sb.append("\n");
-			
+
 		}
 		textarea.setText(sb.toString());
 		panel.getChildren().add(textarea);

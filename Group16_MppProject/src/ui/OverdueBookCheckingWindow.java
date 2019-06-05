@@ -85,11 +85,10 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 		TableColumn<MemberBookEntryDto, Integer> nbCopyCol = new TableColumn<>("#Copies");
 		nbCopyCol.setMinWidth(150);
 		nbCopyCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, Integer>("numberOfCopies"));
-		
+
 		TableColumn<MemberBookEntryDto, String> dueDateCol = new TableColumn<>("Due Date");
 		dueDateCol.setMinWidth(150);
 		dueDateCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("dueDate"));
-		
 
 		TableColumn<MemberBookEntryDto, String> memberIDCol = new TableColumn<>("Member ID");
 		memberIDCol.setMinWidth(150);
