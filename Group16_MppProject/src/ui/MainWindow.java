@@ -9,6 +9,7 @@ import dataaccess.Auth;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class MainWindow extends Stage implements LibWindow{
@@ -72,10 +74,12 @@ public static final MainWindow INSTANCE = new MainWindow();
 			addMenuBoth(mainMenu);
 		}
 		addMenuLogout(mainMenu);
-		Scene scene = new Scene(topContainer, 420, 375);
-		
-        setScene(scene);
-        setMaximized(true);
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
+		Scene scene = new Scene(topContainer, bounds.getWidth()*0.5, bounds.getHeight()*0.6);
+		setScene(scene);
+        
+        //setMaximized(true);
 		
 	}
 	@Override
