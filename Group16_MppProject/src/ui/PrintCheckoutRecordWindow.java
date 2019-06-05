@@ -91,8 +91,8 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 
 		this.bindMemberToList(c.getAllLibraryMember());
 
-		Label printToConsoleLabel = new Label("Hint: Double click on member to print checkout details");
-	
+		Text printToConsoleLabel = new Text("Hint: Double click on member to print checkout details");
+		printToConsoleLabel.setFill(Color.RED);
 		grid.add(printToConsoleLabel, 1, 4);
 
 		Scene scene = new Scene(grid);
@@ -119,8 +119,8 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
     	    row.setOnMouseClicked(event -> {
     	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
     	        	LibraryMember member = row.getItem();
+    	        	ConsoleViewWindow.INSTANCE.setValue(member);
     	        	ConsoleViewWindow.INSTANCE.init();
-    	        	ConsoleViewWindow.INSTANCE.setValue(member.getMemberId());
     				ConsoleViewWindow.INSTANCE.show();
     	        }
     	    });

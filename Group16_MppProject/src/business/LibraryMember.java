@@ -34,6 +34,34 @@ final public class LibraryMember extends Person implements Serializable {
 	}
 
 	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LibraryMember other = (LibraryMember) obj;
+		if (memberId == null) {
+			if (other.memberId != null)
+				return false;
+		} else if (!memberId.equals(other.memberId))
+			return false;
+		return true;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Member Info: " + "ID: " + memberId + ", name: " + getFirstName() + " " + getLastName() + 

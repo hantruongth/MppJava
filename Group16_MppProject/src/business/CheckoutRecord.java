@@ -30,4 +30,10 @@ public class CheckoutRecord implements Serializable  {
 	public void addEntry(CheckoutEntry entry){
 		entries.add(entry);
 	}
+
+	public LibraryMember getMember() {
+		return member;
+	}
+	
+	
 }
