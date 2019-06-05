@@ -14,4 +14,10 @@ public interface ControllerInterface {
 	public List<LibraryMember> getAllLibraryMember();
 	
 	
+	public List<Book> allBooks();
+	public List<LibraryMember> allMemebers();
+	
+	public CheckoutRecord saveCheckoutRecord(CheckoutRecord record);
+	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry);
+	
 }

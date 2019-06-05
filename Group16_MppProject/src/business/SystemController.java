@@ -1,7 +1,11 @@
 package business;
 
 import java.util.ArrayList;
+
+import java.util.Collection;
+
 import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,6 +46,34 @@ public class SystemController implements ControllerInterface {
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
 	}
+
+	
+	@Override
+	public List<Book> allBooks(){
+		DataAccess da = new DataAccessFacade();
+		Collection<Book> books = da.readBooksMap().values();	
+		List<Book> bs = new ArrayList<>();
+		bs.addAll(books);
+		return bs;
+	}
+	
+	@Override
+	public List<LibraryMember> allMemebers(){
+		DataAccess da = new DataAccessFacade();
+		Collection<LibraryMember> members = da.readMemberMap().values();	
+		List<LibraryMember> membersList = new ArrayList<>();
+		membersList.addAll(members);
+		return membersList;
+	}
+	
+	
+	@Override
+	public CheckoutRecord saveCheckoutRecord(CheckoutRecord record){
+		DataAccess da = new DataAccessFacade();
+		da.saveNewCheckoutRecord(record);
+		return record;
+	}
+
 	@Override
 	public List<Author> allAuthors() {
 		DataAccess da = new DataAccessFacade();
@@ -66,8 +98,13 @@ public class SystemController implements ControllerInterface {
 		return new ArrayList<>(memberHashMap.values());
 	}
 	
-
 	@Override
+	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry){
+		DataAccess da = new DataAccessFacade();
+		da.saveNewCheckoutEntry(entry);
+		return entry;
+	}
+	
 	public List<LibraryMember> getLibraryMember(String memberId) {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
@@ -86,7 +123,5 @@ public class SystemController implements ControllerInterface {
 		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
 		return new ArrayList<>(memberMap.values());
 	}
-	
-	
 	
 }

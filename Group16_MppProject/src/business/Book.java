@@ -32,7 +32,6 @@ final public class Book implements Serializable {
 			BookCopy c = copies[i];
 			if(c.equals(copy)) {
 				copies[i] = copy;
-				
 			}
 		}
 	}
@@ -72,9 +71,20 @@ final public class Book implements Serializable {
 				     .map(l -> l.isAvailable())
 				     .reduce(false, (x,y) -> x || y);
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "isbn: " + isbn + ", maxLength: " + maxCheckoutLength + ", available: " + isAvailable();
+		return "isbn: " + isbn + ", maxLength: " + maxCheckoutLength + ", available: " + isAvailable() + " copies:" + copies;
+	}
+	
+	public int getCountAvailable() {
+		int count = 0;
+		if(copies != null) {
+			count = copies.length;
+		}
+		int available = (int) Arrays.stream(copies).filter(x -> !x.isAvailable()).count();
+		return (count - available);
 	}
 	
 	public int getNumCopies() {
