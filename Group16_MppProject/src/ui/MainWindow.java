@@ -94,17 +94,7 @@ public static final MainWindow INSTANCE = new MainWindow();
 		Menu optionsMenu = new Menu("Librarian");
 		
 		
-		MenuItem checkout = new MenuItem("Checkout");
-		checkout.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-            	//Start.hideAllWindows();
-				
-            }
-		});
-		
-		
-		MenuItem allbooks = new MenuItem("All Books");
+		MenuItem checkout = new MenuItem("Book Checkout");
 		checkout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -124,7 +114,7 @@ public static final MainWindow INSTANCE = new MainWindow();
             }
 		});
 		
-		MenuItem printCheckout = new MenuItem("Print Checkout Record");
+		MenuItem printCheckout = new MenuItem("Print Record Checkout ");
 		printCheckout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -135,7 +125,15 @@ public static final MainWindow INSTANCE = new MainWindow();
 				PrintCheckoutRecordWindow.INSTANCE.show();
             }
 		});
-		optionsMenu.getItems().addAll(checkout, printCheckout);
+		MenuItem overdueCheckout = new MenuItem("Overdue Checkout");
+		overdueCheckout.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            	//Start.hideAllWindows();
+				
+            }
+		});
+		optionsMenu.getItems().addAll(checkout, printCheckout, overdueCheckout);
 		mainMenu.getMenus().addAll(optionsMenu);
 	}
 	public void addMenuAdmin(MenuBar mainMenu) {
