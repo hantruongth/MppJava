@@ -2,14 +2,14 @@ package ui;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import business.Book;
 import business.BookCopy;
-import business.CheckoutEntry;
+
 import business.CheckoutRecord;
 import business.ControllerInterface;
 import business.LibraryMember;
@@ -17,6 +17,8 @@ import business.MemberCheckoutsFactory;
 import business.SystemController;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
+import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -48,6 +51,8 @@ public class BooksListTable {
     @FXML private TableColumn<Book, Boolean> available = new TableColumn<>("available");
     @FXML private TableColumn<Book, String> countavailable = new TableColumn<>("countAvailable");
     
+    @FXML private Button btnCheckout;
+    
     
     final Image availableImage = new Image("/ui/available.png");
     final Image unavailableImage = new Image("/ui/unavailable.png");
@@ -58,6 +63,8 @@ public class BooksListTable {
     
     @FXML
     public void initialize() {
+    	
+    	tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	
     	title.setCellValueFactory(new PropertyValueFactory<>("title"));
     	isbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -86,10 +93,18 @@ public class BooksListTable {
     	});
     	
     	tableView.setRowFactory( tv -> {
-    	    TableRow<Book> row = new TableRow<>();
+    	    TableRow<Book> row = new TableRow<Book>();
+    	    
     	    row.setOnMouseClicked(event -> {
+    	  
+    	    	Book rowData = row.getItem();
+    	    	
+    	    	if (rowData.getAvailable() == false) {
+    	    		System.out.println("estamos mirando que putas podemos hacer");
+    	    		tableView.getSelectionModel().clearSelection(row.getIndex());
+    	    	}
+    	    	
     	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-    	            Book rowData = row.getItem();
     	            
     	            StringBuilder sb = new StringBuilder("The book: \n");
 	        		sb.append("ISBN: " + rowData.getIsbn() + "\n");
@@ -135,7 +150,6 @@ public class BooksListTable {
         	                });
     	            	}else {
     	            		
-        	        		
     	            		System.out.println(result);
         	        		Label label = new Label("You must select a Member!!");
 
@@ -147,13 +161,29 @@ public class BooksListTable {
         	        		dialog.show();
         	        		
     	            	}
-    	            	
-    	            	
     	            }
     	        }
     	    });
     	    return row ;
     	});
+    	
+    	tableView.getSelectionModel().getSelectedItems().addListener((Change<? extends Book> change) -> {
+        	
+    		System.out.println("estamos controlando:::" + tableView.getSelectionModel().getSelectedItems());
+        	
+        	ObservableList<Book> selectedItems = tableView.getSelectionModel().getSelectedItems();
+
+	        ArrayList<Book> selectedIDs = new ArrayList<Book>();
+	        for (Book row : selectedItems) {
+	           selectedIDs.add(row);
+	        }
+	        
+	        if (selectedIDs.size() > 0) {
+	        	btnCheckout.setDisable(false);
+	        }else {
+	        	btnCheckout.setDisable(true);
+	        }
+        });
     	
         tableView.getItems().setAll(ci.allBooks());
         addButtonToTable();
@@ -161,7 +191,7 @@ public class BooksListTable {
     
     
     private void addButtonToTable() {
-        TableColumn<Book, Void> colBtn = new TableColumn("Button Column");
+        TableColumn<Book, Void> colBtn = new TableColumn("Actions");
 
         Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
             @Override
@@ -173,7 +203,6 @@ public class BooksListTable {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                         	Book data = getTableView().getItems().get(getIndex());
-                        	
                         	
                         	Alert alert = new Alert(AlertType.CONFIRMATION);
                             alert.setTitle("Make a Copy");
@@ -201,6 +230,7 @@ public class BooksListTable {
 
                     @Override
                     public void updateItem(Void item, boolean empty) {
+                    	
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
@@ -214,7 +244,6 @@ public class BooksListTable {
         };
 
         colBtn.setCellFactory(cellFactory);
-
         tableView.getColumns().add(colBtn);
 
     }
