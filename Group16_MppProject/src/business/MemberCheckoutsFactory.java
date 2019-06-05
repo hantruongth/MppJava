@@ -28,6 +28,7 @@ public class MemberCheckoutsFactory {
 		CheckoutEntry entry = new CheckoutEntry(record, copy, date);
 		ci.saveCheckoutEntry(entry);
 		record.addEntry(entry);
+		ci.saveCheckoutRecord(record);
 		return entry;	
 	}
 
