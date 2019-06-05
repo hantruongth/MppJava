@@ -27,6 +27,9 @@ final public class LibraryMember extends Person implements Serializable {
 	
 	
 	public void addRecord(CheckoutRecord record) {
+		if (checkoutrecords == null) {
+			checkoutrecords = new ArrayList<CheckoutRecord>();
+		}
 		checkoutrecords.add(record);
 	}
 

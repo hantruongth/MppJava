@@ -46,6 +46,8 @@ public class BooksListTable {
     @FXML private TableColumn<Book, String> authors = new TableColumn<>("authors");
     @FXML private TableColumn<Book, String> numCopies = new TableColumn<>("numCopies");
     @FXML private TableColumn<Book, Boolean> available = new TableColumn<>("available");
+    @FXML private TableColumn<Book, String> countavailable = new TableColumn<>("countAvailable");
+    
     
     final Image availableImage = new Image("/ui/available.png");
     final Image unavailableImage = new Image("/ui/unavailable.png");
@@ -62,6 +64,7 @@ public class BooksListTable {
     	authors.setCellValueFactory(new PropertyValueFactory<>("authors"));
     	numCopies.setCellValueFactory(new PropertyValueFactory<>("numCopies"));
     	available.setCellValueFactory(new PropertyValueFactory<>("available"));
+    	countavailable.setCellValueFactory(new PropertyValueFactory<>("countAvailable"));
     	
     	
     	available.setCellFactory(col -> new TableCell<Book, Boolean>() {

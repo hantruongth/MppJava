@@ -7,17 +7,18 @@
 
 <AnchorPane prefHeight="619.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.BooksListTable">
    <children>
-      <SplitPane dividerPositions="0.09868421052631579" layoutX="7.0" layoutY="8.0" orientation="VERTICAL" prefHeight="610.0" prefWidth="918.0">
+      <SplitPane dividerPositions="0.09868421052631579" layoutX="7.0" layoutY="8.0" orientation="VERTICAL" prefHeight="610.0" prefWidth="1038.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TableView fx:id="tableView" prefHeight="544.0" prefWidth="918.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tableView" prefHeight="544.0" prefWidth="1038.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="isbn" prefWidth="75.0" text="ISBN" />
                         <TableColumn fx:id="title" prefWidth="240.0" text="Title" />
                         <TableColumn fx:id="authors" prefWidth="264.0" text="Authors" />
                         <TableColumn fx:id="numCopies" prefWidth="75.0" text="# Copies" />
                         <TableColumn fx:id="available" prefWidth="75.0" text="Available" />
+                        <TableColumn fx:id="countavailable" prefWidth="200.0" text="Count Available" />
                     </columns>
                   </TableView>
                </children>

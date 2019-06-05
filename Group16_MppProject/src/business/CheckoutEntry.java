@@ -23,7 +23,6 @@ public class CheckoutEntry implements Serializable {
 		this.copy = copy;
 		this.date = date;
 		this.duedate = getDueDate(copy, date);
-		System.out.println("la fecha es:" + this.duedate);
 	}
 	
 	private LocalDate getDueDate(BookCopy copy, LocalDate date) {
