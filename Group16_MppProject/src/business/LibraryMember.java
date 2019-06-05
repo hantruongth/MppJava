@@ -26,6 +26,11 @@ final public class LibraryMember extends Person implements Serializable {
 
 	
 	
+	public void addRecord(CheckoutRecord record) {
+		checkoutrecords.add(record);
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Member Info: " + "ID: " + memberId + ", name: " + getFirstName() + " " + getLastName() + 

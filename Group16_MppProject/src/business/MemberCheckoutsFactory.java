@@ -11,6 +11,7 @@ public class MemberCheckoutsFactory {
 		ControllerInterface ci = new SystemController();
 		CheckoutRecord record = new CheckoutRecord(member, date);
 		ci.saveCheckoutRecord(record);
+		member.addRecord(record);
 		return record;	
 	}
 	
