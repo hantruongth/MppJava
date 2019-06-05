@@ -1,5 +1,6 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import business.Book;
@@ -126,7 +128,7 @@ public class SystemController implements ControllerInterface {
 	}
 	
 	@Override
-	public List<CheckoutEntry> getCheckoutEntries(LibraryMember member) {
+	public Map<LocalDate, List<CheckoutEntry>> getCheckoutEntries(LibraryMember member) {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, CheckoutRecord> checkoutHashMap = da.readCheckoutRecordMap();
 		Collection<CheckoutRecord> checkoutRecords = checkoutHashMap.values();
@@ -135,9 +137,19 @@ public class SystemController implements ControllerInterface {
 			if(e.getMember().equals(member))
 				checkoutRecordOfMember.add(e);
 		});
+		Map<LocalDate, List<CheckoutEntry>> checkoutEntriesMap = new HashMap<>();
+		checkoutRecordOfMember.forEach(e->{
+			List<CheckoutEntry> existList = checkoutEntriesMap.get(e.getDate());
+			if(existList == null)
+				existList = new ArrayList<>();
+			
+			existList.addAll(e.getEntries());
+			checkoutEntriesMap.put(e.getDate(), existList);
+			
+		});
 //		if (checkoutRecordOfMember != null)
 //			return checkoutRecordOfMember.getEntries();
 		//return checkoutRecordOfMemb;
-		return null;
+		return checkoutEntriesMap;
 	}
 }

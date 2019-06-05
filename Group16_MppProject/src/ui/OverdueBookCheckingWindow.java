@@ -97,20 +97,20 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 		setScene(scene);
 
-//		searchMemberBtn.setOnAction(new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent event) {
-//				String memberId = memberIdTextField.getText();
-//				if (memberId != null && !memberId.isEmpty()) {
-//					// bindMemberToList(c.getLibraryMember(memberId));
-//				} else {
-//					// bindMemberToList(c.getAllLibraryMember());
-//
-//				}
-//
-//			}
-//		});
+		searchBookBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				String memberId = memberIdTextField.getText();
+				if (memberId != null && !memberId.isEmpty()) {
+					// bindMemberToList(c.getLibraryMember(memberId));
+				} else {
+					// bindMemberToList(c.getAllLibraryMember());
+
+				}
+
+			}
+		});
 
 		tableMemberView.setRowFactory(tv -> {
 			TableRow<Book> row = new TableRow<>();

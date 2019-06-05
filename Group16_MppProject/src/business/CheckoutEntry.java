@@ -38,8 +38,8 @@ public class CheckoutEntry implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "id:" + id + "book: " + copy.getBook().getTitle() +
-				", checkout: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) +
-				", duedate: " + duedate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+		return "Id:" + id + "   Book: " + copy.getBook().getTitle() +
+				"   Checkout: " + date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) +
+				"   Duedate: " + duedate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
 	}
 }

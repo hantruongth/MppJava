@@ -130,6 +130,10 @@ public static final MainWindow INSTANCE = new MainWindow();
             @Override
             public void handle(ActionEvent e) {
             	//Start.hideAllWindows();
+				if(!OverdueBookCheckingWindow.INSTANCE.isInitialized()) {
+					OverdueBookCheckingWindow.INSTANCE.init();
+				}
+				OverdueBookCheckingWindow.INSTANCE.show();
 				
             }
 		});
