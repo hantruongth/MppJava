@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import business.Book;
 import business.CheckoutEntry;
 import business.ControllerInterface;
 import business.LibraryMember;
@@ -17,15 +16,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -51,8 +48,6 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
-
-		ControllerInterface c = new SystemController();
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -82,37 +77,36 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 		TableColumn<MemberBookEntryDto, String> isbnCol = new TableColumn<>("ISBN");
 		isbnCol.setMinWidth(150);
 		isbnCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("isbn"));
-		isbnCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		TableColumn<MemberBookEntryDto, String> titleCol = new TableColumn<>("Title");
 		titleCol.setMinWidth(150);
-		titleCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("title"));
-		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		titleCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("bookTitle"));
 
-		TableColumn<MemberBookEntryDto, String> nbCopyCol = new TableColumn<>("#Copies");
+		TableColumn<MemberBookEntryDto, Integer> nbCopyCol = new TableColumn<>("#Copies");
 		nbCopyCol.setMinWidth(150);
-		nbCopyCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("numberOfCopies"));
-		nbCopyCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		nbCopyCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, Integer>("numberOfCopies"));
 		
+		TableColumn<MemberBookEntryDto, String> dueDateCol = new TableColumn<>("Due Date");
+		dueDateCol.setMinWidth(150);
+		dueDateCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("dueDate"));
+		
+
 		TableColumn<MemberBookEntryDto, String> memberIDCol = new TableColumn<>("Member ID");
 		memberIDCol.setMinWidth(150);
 		memberIDCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("memberId"));
-		memberIDCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		
-		TableColumn<MemberBookEntryDto, String> memberNameCol = new TableColumn<>("First name");
-		memberNameCol.setMinWidth(150);
-		memberNameCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("title"));
-		memberNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		
+
+		TableColumn<MemberBookEntryDto, String> memberFirstNameCol = new TableColumn<>("First name");
+		memberFirstNameCol.setMinWidth(150);
+		memberFirstNameCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("memberFirstName"));
+
+		TableColumn<MemberBookEntryDto, String> memberLastNameCol = new TableColumn<>("First name");
+		memberLastNameCol.setMinWidth(150);
+		memberLastNameCol.setCellValueFactory(new PropertyValueFactory<MemberBookEntryDto, String>("memberLastName"));
+
 		tableOverdueView.getColumns().clear();
-		tableOverdueView.getColumns().addAll(isbnCol, titleCol, nbCopyCol, memberIDCol, memberNameCol);
+		tableOverdueView.getColumns().addAll(isbnCol, titleCol, nbCopyCol, dueDateCol, memberIDCol, memberFirstNameCol,
+				memberLastNameCol);
 		grid.add(tableOverdueView, 1, 3);
-
-		// this.bindMemberToList(c.getAllLibraryMember());
-
-		Text printToConsoleLabel = new Text("Hint: Double click on member to print checkout details");
-		printToConsoleLabel.setFill(Color.RED);
-		grid.add(printToConsoleLabel, 1, 4);
 
 		Scene scene = new Scene(grid);
 
@@ -127,17 +121,17 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 					ControllerInterface ci = new SystemController();
 					Map<LibraryMember, List<CheckoutEntry>> memberChecoutEntryMap = ci.getCheckoutEntryList(isbn);
 					List<MemberBookEntryDto> memberBookEntryOverdueList = new ArrayList<MemberBookEntryDto>();
-					for(Entry<LibraryMember, List<CheckoutEntry>> entry: memberChecoutEntryMap.entrySet()) {
-						
+					for (Entry<LibraryMember, List<CheckoutEntry>> entry : memberChecoutEntryMap.entrySet()) {
+
 						List<CheckoutEntry> checkoutEntries = entry.getValue();
-						
-						for(CheckoutEntry checkout: checkoutEntries) {
+
+						for (CheckoutEntry checkout : checkoutEntries) {
 							memberBookEntryOverdueList.add(new MemberBookEntryDto(entry.getKey(), checkout));
 						}
 					}
 					tableOverdueView.getItems().clear();
 					tableOverdueView.getItems().setAll(memberBookEntryOverdueList);
-					
+
 				} else {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Input error");
@@ -148,7 +142,6 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 			}
 		});
-
 
 	}
 

@@ -164,6 +164,9 @@ public class SystemController implements ControllerInterface {
 			if(memberEntryMap.get(e.getMember()) != null) {
 				overdueEntries.addAll(memberEntryMap.get(e.getMember()));
 				memberEntryMap.put(e.getMember(), overdueEntries);
+			}else {
+				if(overdueEntries.size() > 0)
+					memberEntryMap.put(e.getMember(), overdueEntries);
 			}
 			
 		});

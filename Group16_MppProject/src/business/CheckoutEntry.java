@@ -37,15 +37,15 @@ public class CheckoutEntry implements Serializable {
 	public BookCopy getCopy() {
 		return this.copy;
 	}
-	
+
 	public LocalDate getDueDate() {
 		return this.duedate;
 	}
 
 	@Override
 	public String toString() {
-		return "Id:" + id + "   Book: " + copy.getBook().getTitle() + "   Checkout: "
-				+ date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + "   Duedate: "
+		return "ISBN:  " + copy.getBook().getIsbn() + ",   Book: " + copy.getBook().getTitle() + ",   Checkout: "
+				+ date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + ",   Duedate: "
 				+ duedate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
 	}
 }
