@@ -96,27 +96,18 @@ public class MainWindow extends Stage implements LibWindow {
 
 	public void addMenuLibrarian(MenuBar mainMenu) {
 		Menu optionsMenu = new Menu("Librarian");
-<<<<<<< HEAD
-		
-		
-		MenuItem checkout = new MenuItem("Checkout Book");
-=======
 
-		MenuItem checkout = new MenuItem("Book Checkout");
->>>>>>> 5412d0820aeb592b0eb6671b36d3b66ed1f1afae
+		MenuItem checkout = new MenuItem("Checkout Book");
+
 		checkout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				launchCheckoutWindow();
 			}
 		});
-<<<<<<< HEAD
-		
-		MenuItem printCheckout = new MenuItem("Print Checkout Record");
-=======
 
-		MenuItem printCheckout = new MenuItem("Print Record Checkout ");
->>>>>>> 5412d0820aeb592b0eb6671b36d3b66ed1f1afae
+		MenuItem printCheckout = new MenuItem("Print Checkout Record");
+
 		printCheckout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
