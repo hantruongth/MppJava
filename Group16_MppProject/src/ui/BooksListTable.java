@@ -16,6 +16,7 @@ import business.ControllerInterface;
 import business.LibraryMember;
 import business.MemberCheckoutsFactory;
 import business.SystemController;
+import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import javafx.collections.ListChangeListener.Change;
@@ -112,6 +113,11 @@ public class BooksListTable {
     	    });
     	    return row ;
     	});
+    	
+    	if (SystemController.currentAuth == Auth.ADMIN) {
+    		btnCheckout.setVisible(false);
+    	}
+    	
     	
     	tableView.getSelectionModel().getSelectedItems().addListener((Change<? extends Book> change) -> {
 	        
@@ -224,7 +230,14 @@ public class BooksListTable {
         };
 
         colBtn.setCellFactory(cellFactory);
-        tableView.getColumns().add(colBtn);
+        
+
+    	if (SystemController.currentAuth == Auth.ADMIN ||
+    			SystemController.currentAuth == Auth.BOTH
+    			) {
+    		tableView.getColumns().add(colBtn);
+    	}
+        
 
     }
 }
