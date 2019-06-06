@@ -107,10 +107,12 @@ public class CheckoutWindowClass  implements Initializable{
 			
 			for(Book book: books) {
 				BookCopy copy = book.getNextAvailableCopy();
-				MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
-				copy.changeAvailability();
-				book.updateCopies(copy);
-				da.saveBook(book);
+				if(copy != null) { // check null 
+					MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
+					copy.changeAvailability();
+					book.updateCopies(copy);
+					da.saveBook(book);
+				}
 			}
 			
 			tableView.getItems().clear();
