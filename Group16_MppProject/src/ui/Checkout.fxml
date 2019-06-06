@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="464.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.17592592592592593" orientation="VERTICAL" prefHeight="464.0" prefWidth="563.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="57.0" prefWidth="498.0">
+               <children>
+                  <Label layoutX="17.0" layoutY="14.0" text="Select Member" />
+                  <ComboBox fx:id="membersComboBox" layoutX="17.0" layoutY="36.0" prefHeight="27.0" prefWidth="526.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="438.0">
+               <children>
+                  <Button layoutX="469.0" layoutY="338.0" mnemonicParsing="false" text="Cancel" fx:id="btnCancel" onAction="#handleCloseButtonAction"/>
+                  <Button layoutX="369.0" layoutY="338.0" mnemonicParsing="false" text="Checkout" fx:id="btnAccept"/>
+                  <ScrollPane fx:id="scrollPanelBooks" prefHeight="301.0" prefWidth="561.0">
+                     <content>
+                        <VBox fx:id="vb" prefHeight="299.0" prefWidth="560.0" />
+                     </content></ScrollPane>
+                  <Label layoutX="28.0" layoutY="330.0" textFill="#f20101" visible="false" fx:id="lblError"/>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
