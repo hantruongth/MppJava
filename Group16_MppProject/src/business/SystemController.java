@@ -156,7 +156,10 @@ public class SystemController implements ControllerInterface {
 			List<CheckoutEntry> entries = e.getEntries();
 			
 			for (CheckoutEntry entry : entries) {
-				if(entry.getCopy().getBook().getIsbn().equalsIgnoreCase(isbn) && entry.getDueDate().isBefore(LocalDate.now())){
+				if(isbn == null && entry.getDueDate().isBefore(LocalDate.now())) {
+					overdueEntries.add(entry);
+				}
+				else if(isbn != null && entry.getCopy().getBook().getIsbn().equalsIgnoreCase(isbn) && entry.getDueDate().isBefore(LocalDate.now())){
 					overdueEntries.add(entry);
 				}
 			}

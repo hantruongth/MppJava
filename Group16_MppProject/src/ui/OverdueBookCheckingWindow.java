@@ -10,6 +10,7 @@ import business.ControllerInterface;
 import business.LibraryMember;
 import business.SystemController;
 import business.dto.MemberBookEntryDto;
+import business.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -35,6 +38,7 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 	public static final OverdueBookCheckingWindow INSTANCE = new OverdueBookCheckingWindow();
 	private TableView<MemberBookEntryDto> tableOverdueView = new TableView<MemberBookEntryDto>();
 	private boolean isInitialized = false;
+	private ControllerInterface ci;
 
 	public boolean isInitialized() {
 		return isInitialized;
@@ -48,6 +52,9 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
+		ci = new SystemController();
+		;
+
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -67,6 +74,16 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 		TextField isbnTextField = new TextField();
 		grid.add(isbnTextField, 1, 1);
+
+		isbnTextField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent ke) {
+				if (ke.getCode().equals(KeyCode.ENTER)) {
+					populateTableViewData(isbnTextField.getText());
+
+				}
+			}
+		});
 
 		Button searchBookBtn = new Button("Overdue search");
 		HBox hbBtn = new HBox(10);
@@ -107,6 +124,8 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 				memberLastNameCol);
 		grid.add(tableOverdueView, 1, 3);
 
+		populateTableViewData(null);
+
 		Scene scene = new Scene(grid);
 
 		setScene(scene);
@@ -116,21 +135,8 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 			@Override
 			public void handle(ActionEvent event) {
 				String isbn = isbnTextField.getText();
-				if (isbn != null && !isbn.isEmpty()) {
-					ControllerInterface ci = new SystemController();
-					Map<LibraryMember, List<CheckoutEntry>> memberChecoutEntryMap = ci.getCheckoutEntryList(isbn);
-					List<MemberBookEntryDto> memberBookEntryOverdueList = new ArrayList<MemberBookEntryDto>();
-					for (Entry<LibraryMember, List<CheckoutEntry>> entry : memberChecoutEntryMap.entrySet()) {
-
-						List<CheckoutEntry> checkoutEntries = entry.getValue();
-
-						for (CheckoutEntry checkout : checkoutEntries) {
-							memberBookEntryOverdueList.add(new MemberBookEntryDto(entry.getKey(), checkout));
-						}
-					}
-					tableOverdueView.getItems().clear();
-					tableOverdueView.getItems().setAll(memberBookEntryOverdueList);
-
+				if (!Utils.isEmpty(isbn)) {
+					populateTableViewData(isbn);
 				} else {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Input error");
@@ -144,4 +150,18 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 
 	}
 
+	private void populateTableViewData(String isbn) {
+		Map<LibraryMember, List<CheckoutEntry>> memberChecoutEntryMap = ci.getCheckoutEntryList(isbn);
+		List<MemberBookEntryDto> memberBookEntryOverdueList = new ArrayList<MemberBookEntryDto>();
+		for (Entry<LibraryMember, List<CheckoutEntry>> entry : memberChecoutEntryMap.entrySet()) {
+
+			List<CheckoutEntry> checkoutEntries = entry.getValue();
+
+			for (CheckoutEntry checkout : checkoutEntries) {
+				memberBookEntryOverdueList.add(new MemberBookEntryDto(entry.getKey(), checkout));
+			}
+		}
+		tableOverdueView.getItems().clear();
+		tableOverdueView.getItems().setAll(memberBookEntryOverdueList);
+	}
 }

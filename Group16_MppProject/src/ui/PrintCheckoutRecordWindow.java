@@ -18,6 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -30,6 +32,7 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 	public static final PrintCheckoutRecordWindow INSTANCE = new PrintCheckoutRecordWindow();
 	private TableView<LibraryMember> tableMemberView = new TableView<LibraryMember>();
 	private boolean isInitialized = false;
+	private ControllerInterface ci;
 
 	public boolean isInitialized() {
 		return isInitialized;
@@ -43,7 +46,7 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 	@Override
 	public void init() {
 		this.setTitle("LibrarySystem Print Checkout Record");
-		ControllerInterface c = new SystemController();
+		ci = new SystemController();
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -64,6 +67,16 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 		TextField memberIdTextField = new TextField();
 		grid.add(memberIdTextField, 1, 1);
 
+		memberIdTextField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent ke) {
+				if (ke.getCode().equals(KeyCode.ENTER)) {
+					doSearchMember(memberIdTextField.getText());
+
+				}
+			}
+		});
+		
 		Button searchMemberBtn = new Button("Search member");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
@@ -89,7 +102,7 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 		tableMemberView.getColumns().addAll(memberIdCol, memberFirstNameCol, memberLastNameCol);
 		grid.add(tableMemberView, 1, 3);
 
-		this.bindMemberToList(c.getAllLibraryMember());
+		this.bindMemberToList(ci.getAllLibraryMember());
 
 		Text printToConsoleLabel = new Text("Hint: Double click on member to print checkout details");
 		printToConsoleLabel.setFill(Color.RED);
@@ -104,13 +117,7 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 			@Override
 			public void handle(ActionEvent event) {
 				String memberId = memberIdTextField.getText();
-				if (memberId != null && !memberId.isEmpty()) {
-					bindMemberToList(c.getLibraryMember(memberId));
-				} else {
-					bindMemberToList(c.getAllLibraryMember());
-
-				}
-
+				doSearchMember(memberId);
 			}
 		});
 
@@ -127,6 +134,14 @@ public class PrintCheckoutRecordWindow extends Stage implements LibWindow {
 			return row;
 		});
 
+	}
+	
+	private void doSearchMember(String memberId) {
+		if (memberId != null && !memberId.isEmpty()) {
+			bindMemberToList(ci.getLibraryMember(memberId));
+		} else {
+			bindMemberToList(ci.getAllLibraryMember());
+		}
 	}
 
 	private void bindMemberToList(List<LibraryMember> members) {
