@@ -171,6 +171,9 @@ public class BooksListTable {
     
     private ArrayList<Book> getItemsSelected() {
     	ObservableList<Book> selectedItems = tableView.getSelectionModel().getSelectedItems();
+    	ObservableList<Book> allItems = tableView.getItems();
+    	
+    	System.out.println(allItems);
 
         ArrayList<Book> selectedIDs = new ArrayList<Book>();
         for (Book row : selectedItems) {
