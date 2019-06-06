@@ -106,7 +106,7 @@ public class BooksListTable {
     	  
     	    	Book rowData = row.getItem();
     	    	
-    	    	if (rowData.getAvailable() == false) {
+    	    	if (rowData != null && rowData.getAvailable() == false) {
     	    		tableView.getSelectionModel().clearSelection(row.getIndex());
     	    	}
     	    });
