@@ -25,10 +25,13 @@ public class Start extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 	private Text messageBar = new Text();
+
 	public void clear() {
 		messageBar.setText("");
 	}
+
 	private static Stage primStage = null;
 
 	public static Stage primStage() {
@@ -40,8 +43,9 @@ public class Start extends Application {
 		static Color red = Color.FIREBRICK;
 	}
 
-	private static Stage[] allWindows = { AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE,
-			MainWindow.INSTANCE, AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE, ConsoleViewWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE };
+	private static Stage[] allWindows = { AllMembersWindow.INSTANCE, AllBooksWindow.INSTANCE, MainWindow.INSTANCE,
+			AddBookWindow.INSTANCE, PrintCheckoutRecordWindow.INSTANCE, ConsoleViewWindow.INSTANCE,
+			PrintCheckoutRecordWindow.INSTANCE };
 
 	public static void hideAllWindows() {
 		primStage.hide();
@@ -89,57 +93,57 @@ public class Start extends Application {
 		hbBtn.getChildren().add(loginBtn);
 		grid.add(hbBtn, 1, 4);
 
-        HBox messageBox = new HBox(10);
-        messageBox.setAlignment(Pos.BOTTOM_RIGHT);
-        messageBox.getChildren().add(messageBar);;
-        grid.add(messageBox, 1, 6);
-        
-        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override
-        	public void handle(ActionEvent e) {
-        		doLogin(userTextField.getText().trim(), pwBox.getText().trim());
-        	}
-        });
-        userTextField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	        @Override
-	        public void handle(KeyEvent ke)
-	        {
-	            if (ke.getCode().equals(KeyCode.ENTER)) {
-	            	doLogin(userTextField.getText().trim(), pwBox.getText().trim());
-	            }
-	        }
-	    });
-        pwBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	        @Override
-	        public void handle(KeyEvent ke)
-	        {
-	            if (ke.getCode().equals(KeyCode.ENTER)) {
-	            	doLogin(userTextField.getText().trim(), pwBox.getText().trim());
-	            }
-	        }
-	    });
+		HBox messageBox = new HBox(10);
+		messageBox.setAlignment(Pos.BOTTOM_RIGHT);
+		messageBox.getChildren().add(messageBar);
+		;
+		grid.add(messageBox, 1, 6);
 
-        
+		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				doLogin(userTextField.getText().trim(), pwBox.getText().trim());
+			}
+		});
+		userTextField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent ke) {
+				if (ke.getCode().equals(KeyCode.ENTER)) {
+					doLogin(userTextField.getText().trim(), pwBox.getText().trim());
+				}
+			}
+		});
+		pwBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent ke) {
+				if (ke.getCode().equals(KeyCode.ENTER)) {
+					doLogin(userTextField.getText().trim(), pwBox.getText().trim());
+				}
+			}
+		});
+
 		Scene scene = new Scene(grid);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
 	}
+
 	public void doLogin(String id, String pw) {
 		try {
 			ControllerInterface c = new SystemController();
 			c.login(id, pw);
 			messageBar.setFill(Start.Colors.green);
-     	    messageBar.setText("Login successful");
-     	   backToMain();
-		} catch(LoginException ex) {
+			messageBar.setText("Login successful");
+			backToMain();
+		} catch (LoginException ex) {
 			messageBar.setFill(Start.Colors.red);
 			messageBar.setText("Error! " + ex.getMessage());
 		}
 	}
+
 	public static void backToMain() {
 		hideAllWindows();
-		if(!MainWindow.INSTANCE.isInitialized()) {
+		if (!MainWindow.INSTANCE.isInitialized()) {
 			MainWindow.INSTANCE.init();
 		}
 		MainWindow.INSTANCE.clear();

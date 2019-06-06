@@ -1,6 +1,8 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
@@ -19,6 +21,8 @@ public interface ControllerInterface {
 	
 	public CheckoutRecord saveCheckoutRecord(CheckoutRecord record);
 	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry);
-	public List<CheckoutEntry> getCheckoutEntries(LibraryMember member);
+	public Map<LocalDate, List<CheckoutEntry>> getCheckoutEntries(LibraryMember member);
+	
+	public Map<LibraryMember, List<CheckoutEntry>> getCheckoutEntryList(String isbn);
 	
 }
