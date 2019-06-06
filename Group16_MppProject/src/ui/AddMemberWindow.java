@@ -64,6 +64,7 @@ public class AddMemberWindow extends Stage implements LibWindow{
 		tableMemberView.setItems(prods);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 		

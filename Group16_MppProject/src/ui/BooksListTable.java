@@ -1,10 +1,11 @@
 package ui;
 
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
 
 import business.Book;
@@ -15,12 +16,18 @@ import business.ControllerInterface;
 import business.LibraryMember;
 import business.MemberCheckoutsFactory;
 import business.SystemController;
+import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -36,6 +43,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 
@@ -99,85 +107,21 @@ public class BooksListTable {
     	  
     	    	Book rowData = row.getItem();
     	    	
-    	    	if (rowData.getAvailable() == false) {
-    	    		System.out.println("estamos mirando que putas podemos hacer");
+    	    	if (rowData != null && rowData.getAvailable() == false) {
     	    		tableView.getSelectionModel().clearSelection(row.getIndex());
     	    	}
-    	    	
-    	        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-    	            
-    	            StringBuilder sb = new StringBuilder("The book: \n");
-	        		sb.append("ISBN: " + rowData.getIsbn() + "\n");
-	        		sb.append("Title: " + rowData.getTitle() + "\n");
-	        		sb.append("Authors: " + rowData.getAuthors() + "\n");
-	        		
-    	            if (rowData.getAvailable() == false) {
-    	            	
-    	        		sb.append("is not Available");
-    	        			
-    	            	Alert alert = new Alert(AlertType.INFORMATION,
-    	            			sb.toString());
-    	            	
-    	            	alert.show(); 
-    	            }else {
-    	            	
-    	            	sb.append("is Available");
-    	        	
-    	        		List<LibraryMember> membersList = ci.allMemebers();    	        		
-    	            	
-    	            	ChoiceDialog<LibraryMember> dialog = new ChoiceDialog<LibraryMember>(null, membersList);
-    	            	
-    	            	dialog.setTitle("Checkout a Book");
-    	            	dialog.setHeaderText(sb.toString());
-    	            	dialog.setContentText("Select a Member:");
-    	            	 
-    	            	Optional<LibraryMember> result = dialog.showAndWait();
-    	            	
-    	            	if (result.isPresent()) {
-    	            		result.ifPresent(member -> {
-    	            			
-    	            			BookCopy copy = rowData.getNextAvailableCopy();
-    	            			
-    	            			CheckoutRecord record = MemberCheckoutsFactory.createCheckoutRecord(member, LocalDate.now());
-    	            			MemberCheckoutsFactory.createCheckoutEntry(record, copy, LocalDate.now());
-    	            			copy.changeAvailability();
-    	            			rowData.updateCopies(copy);
-    	            			da.saveBook(rowData);
-    	            			tableView.getItems().clear();
-    	            			tableView.getItems().setAll(ci.allBooks());
-    	            			System.out.println(rowData);
-    	            			
-        	                });
-    	            	}else {
-    	            		
-    	            		System.out.println(result);
-        	        		Label label = new Label("You must select a Member!!");
-
-        	        		GridPane expContent = new GridPane();
-        	        		expContent.setMaxWidth(Double.MAX_VALUE);
-        	        		expContent.add(label, 0, 0);
-        	        		dialog.getDialogPane().setExpandableContent(expContent);
-        	        		dialog.getDialogPane().setExpanded(true);
-        	        		dialog.show();
-        	        		
-    	            	}
-    	            }
-    	        }
     	    });
     	    return row ;
     	});
     	
+    	if (SystemController.currentAuth == Auth.ADMIN) {
+    		btnCheckout.setVisible(false);
+    	}
+    	
+    	
     	tableView.getSelectionModel().getSelectedItems().addListener((Change<? extends Book> change) -> {
-        	
-    		System.out.println("estamos controlando:::" + tableView.getSelectionModel().getSelectedItems());
-        	
-        	ObservableList<Book> selectedItems = tableView.getSelectionModel().getSelectedItems();
-
-	        ArrayList<Book> selectedIDs = new ArrayList<Book>();
-	        for (Book row : selectedItems) {
-	           selectedIDs.add(row);
-	        }
 	        
+    		ArrayList<Book> selectedIDs = getItemsSelected();
 	        if (selectedIDs.size() > 0) {
 	        	btnCheckout.setDisable(false);
 	        }else {
@@ -185,8 +129,50 @@ public class BooksListTable {
 	        }
         });
     	
+    	
+    	btnCheckout.setOnAction(new EventHandler<ActionEvent>() {
+    	    
+    		@FXML
+            public void handle(ActionEvent e) {
+	    		try {
+
+		    		URL location = getClass().getResource("/ui/Checkout.fxml");
+		            FXMLLoader fxmlLoader = new FXMLLoader(location);
+		            
+		            CheckoutWindowClass controller = new CheckoutWindowClass(
+		            	getItemsSelected(),
+		            	ci.allMemebers(),
+		            	tableView
+		            );
+		            
+		            fxmlLoader.setController(controller);
+		            Parent rootCheckout = (Parent) fxmlLoader.load();
+		            
+		            Scene scene = new Scene(rootCheckout);
+		            Stage newStage = new Stage();
+		            newStage.setScene(scene);
+		            newStage.show();
+		    		
+		    		
+	    		}catch(Exception e1) {
+	    			e1.printStackTrace();
+	    		}
+            }
+    	    	
+    	});
+    	
         tableView.getItems().setAll(ci.allBooks());
         addButtonToTable();
+    }
+    
+    private ArrayList<Book> getItemsSelected() {
+    	ObservableList<Book> selectedItems = tableView.getSelectionModel().getSelectedItems();
+
+        ArrayList<Book> selectedIDs = new ArrayList<Book>();
+        for (Book row : selectedItems) {
+           selectedIDs.add(row);
+        }
+        return selectedIDs;
     }
     
     
@@ -244,7 +230,14 @@ public class BooksListTable {
         };
 
         colBtn.setCellFactory(cellFactory);
-        tableView.getColumns().add(colBtn);
+        
+
+    	if (SystemController.currentAuth == Auth.ADMIN ||
+    			SystemController.currentAuth == Auth.BOTH
+    			) {
+    		tableView.getColumns().add(colBtn);
+    	}
+        
 
     }
 }

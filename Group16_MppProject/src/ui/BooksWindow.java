@@ -29,6 +29,7 @@ public class BooksWindow extends Stage implements LibWindow {
             Scene scene = new Scene(fxmlLoader.load());
     		setScene(scene);
     		
+    		
         } catch(Exception e) {
         	e.printStackTrace();
         }

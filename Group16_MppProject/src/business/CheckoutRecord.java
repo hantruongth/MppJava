@@ -34,6 +34,16 @@ public class CheckoutRecord implements Serializable  {
 	public LibraryMember getMember() {
 		return member;
 	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public List<CheckoutEntry> getEntries() {
+		return entries;
+	}
+	
+	
 	
 	
 }

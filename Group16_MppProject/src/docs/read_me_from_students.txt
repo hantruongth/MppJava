@@ -1,3 +1,9 @@
-//This is a note from the team responsible for this project.
-//It tells the professor about any extra work that was done or other things
-//that need to be mentioned.
+Our group number is 16.
+
+#Login information:
+- Admin: admin,			Password: 123456
+- Librarian: lib,		Password: 123456
+- Super Admin: both,	Password: 123456
+
+
+We already solved all problems including the optional extra parts. 
