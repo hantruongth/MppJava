@@ -94,7 +94,7 @@ public static final MainWindow INSTANCE = new MainWindow();
 		Menu optionsMenu = new Menu("Librarian");
 		
 		
-		MenuItem checkout = new MenuItem("Book Checkout");
+		MenuItem checkout = new MenuItem("Checkout Book");
 		checkout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -114,7 +114,7 @@ public static final MainWindow INSTANCE = new MainWindow();
             }
 		});
 		
-		MenuItem printCheckout = new MenuItem("Print Record Checkout ");
+		MenuItem printCheckout = new MenuItem("Print Checkout Record");
 		printCheckout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
