@@ -52,7 +52,7 @@ public class AddMemberWindow extends Stage implements LibWindow{
 	TextField telePhoneTextField;
 
 	private boolean isInitialized = false;
-	private ControllerInterface c = new SystemController();
+	private ControllerInterface sysController = new SystemController();
 	public boolean isInitialized() {
 		return isInitialized;
 	}
@@ -213,7 +213,7 @@ public class AddMemberWindow extends Stage implements LibWindow{
 	}
 	private List<LibraryMember> getLibraryMember() {
 		
-		return c.allLibraryMembers();
+		return sysController.allLibraryMembers();
 
 	}
 	private void bindMemberToList(List<LibraryMember> members) {
@@ -257,7 +257,7 @@ public class AddMemberWindow extends Stage implements LibWindow{
 			return;
 		}
 		
-		c.addLibraryMember(newMember);
+		sysController.addLibraryMember(newMember);
 	}
 	private void doSelectMember() {
 		LibraryMember selMember = tableMemberView.getSelectionModel().getSelectedItem();

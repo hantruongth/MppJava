@@ -27,7 +27,7 @@ public class Start extends Application {
 	}
 
 	private Text messageBar = new Text();
-
+	ControllerInterface sysController = new SystemController();
 	public void clear() {
 		messageBar.setText("");
 	}
@@ -130,8 +130,8 @@ public class Start extends Application {
 
 	public void doLogin(String id, String pw) {
 		try {
-			ControllerInterface c = new SystemController();
-			c.login(id, pw);
+			
+			sysController.login(id, pw);
 			messageBar.setFill(Start.Colors.green);
 			messageBar.setText("Login successful");
 			backToMain();

@@ -15,10 +15,10 @@ import dataaccess.User;
 
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
+	private DataAccess dataAccess = new DataAccessFacade();
 	
-	public void login(String id, String password) throws LoginException {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, User> map = da.readUserMap();
+	public void login(String id, String password) throws LoginException {		
+		HashMap<String, User> map = dataAccess.readUserMap();
 		if(!map.containsKey(id)) {
 			throw new LoginException("ID " + id + " not found");
 		}
@@ -31,25 +31,22 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public List<String> allMemberIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readMemberMap().keySet());
+		retval.addAll(dataAccess.readMemberMap().keySet());
 		return retval;
 	}
 	
 	@Override
 	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readBooksMap().keySet());
+		retval.addAll(dataAccess.readBooksMap().keySet());
 		return retval;
 	}
 
 	
 	@Override
 	public List<Book> allBooks(){
-		DataAccess da = new DataAccessFacade();
-		Collection<Book> books = da.readBooksMap().values();	
+		Collection<Book> books = dataAccess.readBooksMap().values();	
 		List<Book> bs = new ArrayList<>();
 		bs.addAll(books);
 		return bs;
@@ -57,8 +54,7 @@ public class SystemController implements ControllerInterface {
 	
 	@Override
 	public List<LibraryMember> allMemebers(){
-		DataAccess da = new DataAccessFacade();
-		Collection<LibraryMember> members = da.readMemberMap().values();	
+		Collection<LibraryMember> members = dataAccess.readMemberMap().values();	
 		List<LibraryMember> membersList = new ArrayList<>();
 		membersList.addAll(members);
 		return membersList;
@@ -67,45 +63,38 @@ public class SystemController implements ControllerInterface {
 	
 	@Override
 	public CheckoutRecord saveCheckoutRecord(CheckoutRecord record){
-		DataAccess da = new DataAccessFacade();
-		da.saveNewCheckoutRecord(record);
+		dataAccess.saveNewCheckoutRecord(record);
 		return record;
 	}
 
 	@Override
 	public List<Author> allAuthors() {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, Author> authorHashMap = da.readAuthorMap();
+		HashMap<String, Author> authorHashMap = dataAccess.readAuthorMap();
 		return new ArrayList<>(authorHashMap.values());
 	}
 	@Override
 	public void addBook(Book book) {
-		DataAccess da =  new DataAccessFacade();
-		da.saveBook(book);
+		dataAccess.saveBook(book);
 	}
 	@Override
 	public void addLibraryMember(LibraryMember member) {
-		DataAccess da =  new DataAccessFacade();
-		da.saveNewMember(member);
+		dataAccess.saveNewMember(member);
 	}
 	@Override
 	public List<LibraryMember> allLibraryMembers() {
 		// TODO Auto-generated method stub
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, LibraryMember> memberHashMap = da.readMemberMap();
+		HashMap<String, LibraryMember> memberHashMap = dataAccess.readMemberMap();
 		return new ArrayList<>(memberHashMap.values());
 	}
 	
 	@Override
 	public CheckoutEntry saveCheckoutEntry(CheckoutEntry entry){
-		DataAccess da = new DataAccessFacade();
-		da.saveNewCheckoutEntry(entry);
+		dataAccess.saveNewCheckoutEntry(entry);
 		return entry;
 	}
 	
 	public List<LibraryMember> getLibraryMember(String memberId) {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+		HashMap<String, LibraryMember> memberMap = dataAccess.readMemberMap();
 
 		// search by memberID
 		if (memberId != null) {
@@ -117,15 +106,13 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public List<LibraryMember> getAllLibraryMember() {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+		HashMap<String, LibraryMember> memberMap = dataAccess.readMemberMap();
 		return new ArrayList<>(memberMap.values());
 	}
 	
 	@Override
 	public Map<LocalDate, List<CheckoutEntry>> getCheckoutEntries(LibraryMember member) {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, CheckoutRecord> checkoutHashMap = da.readCheckoutRecordMap();
+		HashMap<String, CheckoutRecord> checkoutHashMap = dataAccess.readCheckoutRecordMap();
 		Collection<CheckoutRecord> checkoutRecords = checkoutHashMap.values();
 		List<CheckoutRecord> checkoutRecordOfMember = new ArrayList<>();
 		checkoutRecords.forEach(e->{
@@ -146,8 +133,7 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public Map<LibraryMember, List<CheckoutEntry>> getCheckoutEntryList(String isbn) {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, CheckoutRecord> checkoutHashMap = da.readCheckoutRecordMap();
+		HashMap<String, CheckoutRecord> checkoutHashMap = dataAccess.readCheckoutRecordMap();
 		Collection<CheckoutRecord> checkoutRecords = checkoutHashMap.values();
 		Map<LibraryMember, List<CheckoutEntry>> memberEntryMap = new HashMap<>();
 		checkoutRecords.forEach(e-> {
