@@ -16,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -206,7 +207,7 @@ public class AddMemberWindow extends Stage implements LibWindow{
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 
-		Scene scene = new Scene(grid, bounds.getWidth()*0.5, bounds.getHeight()*0.955);
+		Scene scene = new Scene(grid, bounds.getWidth()*0.55, bounds.getHeight()*0.955);
         setScene(scene);
         //setMaximized(true);
 	}
@@ -220,9 +221,42 @@ public class AddMemberWindow extends Stage implements LibWindow{
 		this.tableMemberView.getItems().setAll(members);
 	}
 	private void addNewMember(LibraryMember newMember) {
-		if(newMember.getMemberId().isEmpty())
+		if(newMember.getMemberId().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing member id!").showAndWait();
+			memberIDTextField.requestFocus();
 			return;
-
+		}
+		if(newMember.getFirstName().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing first name!").showAndWait();
+			firstNameTextField.requestFocus();
+			return;
+		}
+		if(newMember.getAddress().getStreet().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing street!").showAndWait();
+			streetTextField.requestFocus();
+			return;
+		}
+		if(newMember.getAddress().getCity().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing city!").showAndWait();
+			cityTextField.requestFocus();
+			return;
+		}
+		if(newMember.getAddress().getState().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing state!").showAndWait();
+			stateTextField.requestFocus();
+			return;
+		}
+		if(newMember.getAddress().getZip().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing zip code!").showAndWait();
+			zipCodeTextField.requestFocus();
+			return;
+		}
+		if(newMember.getTelephone().isEmpty()) {
+			new Alert(Alert.AlertType.WARNING, "Missing telephone!").showAndWait();
+			telePhoneTextField.requestFocus();
+			return;
+		}
+		
 		c.addLibraryMember(newMember);
 	}
 	private void doSelectMember() {
