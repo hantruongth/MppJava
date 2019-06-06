@@ -19,6 +19,8 @@ import business.SystemController;
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,8 +39,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -167,10 +171,15 @@ public class BooksListTable {
     
     private ArrayList<Book> getItemsSelected() {
     	ObservableList<Book> selectedItems = tableView.getSelectionModel().getSelectedItems();
+    	ObservableList<Book> allItems = tableView.getItems();
+    	
+    	System.out.println(allItems);
 
         ArrayList<Book> selectedIDs = new ArrayList<Book>();
         for (Book row : selectedItems) {
-           selectedIDs.add(row);
+        	if (row.isAvailable() == true) {
+        		selectedIDs.add(row);
+        	}
         }
         return selectedIDs;
     }

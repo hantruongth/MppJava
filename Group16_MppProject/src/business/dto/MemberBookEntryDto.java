@@ -1,11 +1,12 @@
 package business.dto;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import business.CheckoutEntry;
 import business.LibraryMember;
 
-public class MemberBookEntryDto {
+public class MemberBookEntryDto implements Comparable<MemberBookEntryDto>{
 	
 	private String memberId;
 	private String memberFirstName;
@@ -14,6 +15,8 @@ public class MemberBookEntryDto {
 	private String isbn;
 	private int numberOfCopies;
 	private String dueDate;
+	
+	private LocalDate dueDateLocalDate;
 	
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/YYYY"); 
     
@@ -36,6 +39,7 @@ public class MemberBookEntryDto {
 		this.isbn = entry.getCopy().getBook().getIsbn();
 		this.numberOfCopies = entry.getCopy().getBook().getNumCopies();
 		this.dueDate = formatter.format(entry.getDueDate());
+		this.dueDateLocalDate = entry.getDueDate();
 	}
 
 	public String getMemberId() {
@@ -92,6 +96,11 @@ public class MemberBookEntryDto {
 
 	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	@Override
+	public int compareTo(MemberBookEntryDto o) {
+		return o.dueDateLocalDate.compareTo(this.dueDateLocalDate);
 	}
 	
 	

@@ -159,7 +159,7 @@ public class AddBookWindow extends Stage implements LibWindow {
 				String numberOfCopiesString = nbCopiesTextField.getText();
 				int nbOfcopy = 1;
 				if (numberOfCopiesString != null)
-					nbOfcopy = Integer.parseInt(numberOfCopiesString);
+					nbOfcopy = Integer.parseInt(numberOfCopiesString) - 1;
 
 				Collection<Author> authors = tableAuthorView.getSelectionModel().getSelectedItems();
 

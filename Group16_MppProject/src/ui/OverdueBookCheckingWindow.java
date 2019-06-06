@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -161,6 +162,7 @@ public class OverdueBookCheckingWindow extends Stage implements LibWindow {
 				memberBookEntryOverdueList.add(new MemberBookEntryDto(entry.getKey(), checkout));
 			}
 		}
+		Collections.sort(memberBookEntryOverdueList);
 		tableOverdueView.getItems().clear();
 		tableOverdueView.getItems().setAll(memberBookEntryOverdueList);
 	}
