@@ -11,3 +11,5 @@ We already solved all problems including the optional extra parts.
 Source Code: https://github.com/chalovina/Group16/tree/master/Group16_MppProject
 
 Demo video: https://www.youtube.com/watch?v=DoL4I_s_dPo
+
+To Run the program, simply to execute RUN.bat in the "Jar Execution" folder.
